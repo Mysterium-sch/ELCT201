@@ -41,3 +41,6 @@ Endings:
               6. Everything is gone: everyone is dead, the world is dark and cold
              
 Other button combinations:
+        * gun powder and greed kills 1 LED (except for advanced)
+        * greed and gold kills 1 LED (except for advanced)
+        * aliens and gun powder kills 2 LED (except for modern)
