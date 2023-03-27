@@ -1,0 +1,43 @@
+Populations:
+        Nomads: A group that lives off the land, and travels during weather (immune to cold and hot deaths)
+        Modern: A group similar to our world (immune to aliens)
+        Advanced: An elightened group who have no need for the modern struggles (immune to greed, gold, and religion)
+        
+
+Buttons:
+        1: Wind - on/off
+        2: Humid - on/off
+        3: greed - on/off
+        4: gold - once found is always there
+        5: religion - on/off
+        6: gun powder - once found is always found
+        7: plague - on/off
+        8: renaissance - on/off
+        9. love - on/off
+        10. Aliens - on/off
+        
+Thermisitor: 
+      Makes the enviorment hot when over a certain limitation
+      Makes the enviroment cold when under a certain limitation
+    
+Photsensor:
+      Makes the enviroment sunny over a certain limitation
+      Makes the enviroment cold under a certain limitation
+      
+People will die or be born based off of button orders
+
+Endings:
+        Good:
+              1. World peace: every land has love renaissance and no one is dead
+              2. closer to god: Nomads and Modern religion, love, and aliens for both
+              3. christmas day: cold, religion and love - nomad or modern
+              4. Cultural spread: aliens and renaissance and religion in advanced 
+        Bad:
+              1. Theres nothing here: aliens come to any land once everyone in every land is dead
+              2. Greedy sons of bitches: Nomads or moder, greed and gold and gun powder (with one LED left)
+              3. Been here before: I third of modern is dead, it is hot, and plaugue is on
+              4. Redo: reset button is hit ten times in a row
+              5. Global warming: humid, hot, and windy on any population
+              6. Everything is gone: everyone is dead, the world is dark and cold
+             
+Other button combinations:
