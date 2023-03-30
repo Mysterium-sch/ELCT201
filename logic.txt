@@ -24,6 +24,10 @@ Photsensor:
       Makes the enviroment sunny over a certain limitation
       Makes the enviroment cold under a certain limitation
       
+Motor:
+        Volcano erruption that kills everyone
+        User has 10 seconds to stop it before killing starts
+      
 People will die or be born based off of button orders
 
 Endings:
