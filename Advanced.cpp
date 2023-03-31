@@ -31,8 +31,8 @@ class Advanced {
             return false;
 
         } else if(value.compare("cultural")==0) {
-            std::cout << "This advanced civilization scoffs at the idea of culture as they are beyond the idea of differences.\n";
-            return false;
+            std::cout << "The aliens taught the advanced civilization to grow and accept old concepts. Culture is now being developed.\n";
+            return true;
 
         } else if(value.compare("nothing")==0) {
             if(people == 0) {
