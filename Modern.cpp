@@ -11,7 +11,19 @@ class Modern {
         return people;
     }
 
-    void eventHandler() {
+    void eventHandler(std::string value) {
+            if(value.compare("volcano")==0) {
+            std::cout << "The volcano devastated the modern people and wiped out their civilization.\n";
+            people =0;
+        }
+            if(value.compare("love")==0) {
+                if(people == 0) {
+                    std::cout << "There is no one here to be loved.\n";
+                } else {
+                    std::cout << "Love is in the air.\n";
+                    people +=1;
+                }
+            }
 
     }
     
