@@ -45,6 +45,10 @@ Endings:
               6. Everything is gone: everyone is dead, the world is dark and cold
              
 Other button combinations:
-        * gun powder and greed kills 1 LED (except for advanced)
-        * greed and gold kills 1 LED (except for advanced)
-        * aliens and gun powder kills 2 LED (except for modern)
+        * gun powder and religion kills 1 LED (except for advanced)
+        * greed, gun powder, and gold kills 1 LED (except for advanced)
+        * aliens, greed, and gun powder kills 2 LED (except for modern)
+        * cold and wind kills 1 (except for nomad)
+        * heat and humid kills 1 (except for nomad)
+        * renaissance and love causes 2 to be born
+        * plague and cold kills 1
