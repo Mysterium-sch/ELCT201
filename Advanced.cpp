@@ -2,6 +2,7 @@
 
 class Advanced {
     int people;
+    bool love, wind, greed, humid, gold, religion, gun, plague, renaissance, love, Aliens = false;
 
     Advanced() {
         people = 3;
@@ -28,7 +29,7 @@ class Advanced {
     
         bool endHandler(std::string value) {
         if(value.compare("peace") == 0) {
-            if(people == 3) {
+            if(people == 3 && love && renaissance) {
                 std::cout << "This advanced civilization is in harmony and peace.\n";
                 return true;
             }
@@ -42,11 +43,13 @@ class Advanced {
             return false;
 
         } else if(value.compare("cultural")==0) {
+            if(religion && renaissance && Aliens) {
             std::cout << "The aliens taught the advanced civilization to grow and accept old concepts. Culture is now being developed.\n";
             return true;
+                        }
 
         } else if(value.compare("nothing")==0) {
-            if(people == 0) {
+            if(people == 0 && Aliens) {
                 std::cout << "The world may be vast, but there is no one here. The nomads are gone.\n";
                 return true;
             }
@@ -55,8 +58,10 @@ class Advanced {
             return false;
 
         } else if(value.compare("warming")==0) {
+            if(humid && wind) {
             std::cout << "The world is slowing warming up. This may be a problem, but not the nomads problem.\n";
             return true;
+            }
         } else if(value.compare("gone")==0) {
             if(people == 0) {
                 std::cout << "The world may be vast, but there is no one here. The nomads are gone.\n";
