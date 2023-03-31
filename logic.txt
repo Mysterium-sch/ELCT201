@@ -51,4 +51,8 @@ Other button combinations:
         * cold and wind kills 1 (except for nomad)
         * heat and humid kills 1 (except for nomad)
         * renaissance and love causes 2 to be born
-        * plague and cold kills 1
+        * plague and cold kills 1 (except for nomad)
+        * dark and aliens kills 1
+        * religion and plague kills 1 (except for advanced)
+        * aliens and plague kills 2 (except for moder)
+        * gun and love kills 1
