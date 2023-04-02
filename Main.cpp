@@ -170,8 +170,8 @@ float getMotorCurrent(void)
 std::string CheckTorqueSensor(void)
 {
     // Use the getMotorCurrentValue() function defined above to obtain a current torque value to use for comparison and decision making with your MotorCurrentLimit
-	if(getMotorCurrentValue() <= MotorCurrentLimit) {
-        OUTPUT = 1;
+    if(getMotorCurrentValue() <= MotorCurrentLimit) {
+        return "volcano;
     }
     else {
         return "no";
