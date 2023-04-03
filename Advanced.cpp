@@ -42,7 +42,7 @@ class Advanced {
                 }
             }if(value.compare("greed")==0) {
                 greed != greed;
-                std:cout << "The advanced civilization is immune to the powers that greed holds.\n";
+                std::cout << "The advanced civilization is immune to the powers that greed holds.\n";
             }if(value.compare("humid")==0) {
                 humid != humid;
                 if(humid)
