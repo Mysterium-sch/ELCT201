@@ -157,27 +157,6 @@ std::string CheckTemperatureSensor(void)
     }
 }
 
-//This function will determine the motor current in amperes
-float getMotorCurrent(void)
-{
-	MotorCurrentDigiValue = TorqueSensor.read(); //read the TorqueSensor A/D value
-    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
-    MotorCurrent = MotorCurrentVoltValue / MotorSeriesResistance; // Ohms Law
-
-    return MotorCurrent;
-}
-// This function will check the Over Torque analog input.
-std::string CheckTorqueSensor(void)
-{
-    // Use the getMotorCurrentValue() function defined above to obtain a current torque value to use for comparison and decision making with your MotorCurrentLimit
-    if(getMotorCurrentValue() <= MotorCurrentLimit) {
-        return "volcano;
-    }
-    else {
-        return "no";
-    }
-}
-
 String CheckButton(void) {
     std::string outcome;
     if(CheckLightSensor().compare("no") != 0) {
