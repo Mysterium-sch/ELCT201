@@ -8,7 +8,7 @@ class Advanced {
         people = 3;
     }
 
-        int getPeople() {
+    int getPeople() {
         return people;
     }
 
@@ -184,7 +184,6 @@ class Advanced {
                 if(religion && plague) {
                     std::cout << "The advanced civilization does not belevie 'god' will cure their plague.\n";
                 }
-            }
             } if(value.compare("AlienPlague")==0) {
                 if(Aliens && plague) {
                     std::cout << "Everyone started getting weird bumps after the aliens arrived...\n";
@@ -202,6 +201,7 @@ class Advanced {
                 }
                 }
             }
+    }
             
     
         bool endHandler(std::string value) {
