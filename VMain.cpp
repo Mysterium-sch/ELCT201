@@ -43,7 +43,6 @@ void CheckTorqueSensor(void)
 
 }
 
-// Standard entry point in C++.
 int main(void)
 {
     
@@ -61,6 +60,7 @@ int main(void)
             }
         }
        }
+       wait_us(1000000);
     }
 }
 // End of HardwareInterruptSeedCode
