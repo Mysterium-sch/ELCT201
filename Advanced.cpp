@@ -3,7 +3,7 @@
 class Advanced {
     int people;
     bool wind, greed, humid, gold, religion, gun, plague, renaissance, love, Aliens = false;
-
+    bool cold, dark, hot, light = false;
     Advanced() {
         people = 3;
     }
