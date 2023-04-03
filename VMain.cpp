@@ -2,6 +2,7 @@
 #include "mbed.h"
 #include <iostream>
 #include <cstdlib>
+#include <time.h>
 
 DigitalOut OUTPUT1(PTC2);
 DigitalOut Output2(PTC1);
@@ -45,7 +46,7 @@ void CheckTorqueSensor(void)
 
 int main(void)
 {
-    
+    srand(time(0));
     while(true) {
        if((rand() % (1000 + 1)) == 0) {
         OUTPUT1 =1;
