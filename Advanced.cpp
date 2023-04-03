@@ -42,11 +42,7 @@ class Advanced {
                 }
             }if(value.compare("greed")==0) {
                 greed != greed;
-                if(greed) {
-                std::cout << "People have started to get greedy.\n";
-                } else {
-                    std::cout << "The people's greed is dying down.\n";
-                }
+                std:cout << "The advanced civilization is immune to the powers that greed holds.\n";
             }if(value.compare("humid")==0) {
                 humid != humid;
                 if(humid)
@@ -92,10 +88,38 @@ class Advanced {
                     std::cout << "People are becomming less and less creative.\n";
                 }
             }
-            
+            if(value.compare("cold")==0) {
+                cold = !cold;
+                if(cold) {
+                    std::cout << "The world is becoming very cold.\n";
+                } else {
+                    std::cout << "The frost is melting away.\n";
+                }
+            } if(value.compare("hot")==0) {
+                hot != hot;
+                if(hot) {
+                    std::cout << "The world is becoming increasingly warm.\n";
+                } else {
+                    std::cout << "The heat is dying down.\n";
+                }
+            } if(value.compare("dark")==0) {
+                dark != dark;
+                if(dark) {
+                    std::cout << "The world is getting dark.\n";
+                } else {
+                    std::cout << "The darkness is subsiding.\n";
+                }
+            } if(value.compare("light")==0) {
+                light != light;
+                if(light) {
+                    std::cout << "The world is very bright.\n";
+                } else {
+                    std::cout << "The brightness is subsiding.\n";
+                }
+            }
             // Advanced events
             if(value.compare("blizzard")==0) {
-                if(wind) {
+                if(wind && cold) {
                     std::cout << "A blizzard has struck the civilization.\n";
                     if(people != 0) {
                         people -= 1;
@@ -106,11 +130,7 @@ class Advanced {
             } if(value.compare("warAlien") == 0) {
                 if(gun && Aliens && greed) {
                     if(people != 0) {
-                    std::cout << "The civilization yearned for the alien's tech, which didn't work out for them.\n";
-                    people -= 1;
-                    if(people <= 0) {
-                        people = 0;
-                    }
+                    std::cout << "This advanced civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
                 }
                 }
             } if(value.compare("warGold") == 0) {
@@ -121,7 +141,7 @@ class Advanced {
                     }
                 }
             } if(value.compare("heatStroke")==0) {
-                if(humid) {
+                if(humid && hot) {
                     std::cout << "The civilization is unprepared for the heat.\n";
                     if(people != 0) {
                         people -= 1;
@@ -137,7 +157,7 @@ class Advanced {
                     }
                 }
             } if(value.compare("plagueDeaths")==0) {
-                if(plague) {
+                if(plague && cold) {
                     std::cout << "The sickness is worstening during these harsh winters.\n";
                     if(people != 0) {
                         people -= 1;
@@ -153,7 +173,7 @@ class Advanced {
                     }
                 }
             } if(value.compare("abducted")==0) {
-                if(Aliens) {
+                if(Aliens && dark) {
                     std::cout << "Someone has gone missing, the Aliens claim the didn't do it.\n";
                     people -= 1;
                     if (people <= 0) {
@@ -162,12 +182,9 @@ class Advanced {
                 }
             } if (value.compare("hope")==0) {
                 if(religion && plague) {
-                    std::cout << "God will cure this plague.\n";
-                    people -= 1;
-                    if (people <= 0) {
-                        people = 0;
-                    }
+                    std::cout << "The advanced civilization does not belevie 'god' will cure their plague.\n";
                 }
+            }
             } if(value.compare("AlienPlague")==0) {
                 if(Aliens && plague) {
                     std::cout << "Everyone started getting weird bumps after the aliens arrived...\n";
@@ -177,14 +194,15 @@ class Advanced {
                     }
                 }
             } if(value.compare("GunLove")==0) {
+                if(gun && love) {
                 std::cout << "People sure love their guns.\n";
                 people -= 1;
                 if(people < 0) {
                     people =0 ;
                 }
+                }
             }
             
-            }
     
         bool endHandler(std::string value) {
         if(value.compare("peace") == 0) {
@@ -217,12 +235,12 @@ class Advanced {
             return false;
 
         } else if(value.compare("warming")==0) {
-            if(humid && wind) {
+            if(humid && wind && hot) {
             std::cout << "The world is slowing warming up. This may be a problem, but not the nomads problem.\n";
             return true;
             }
         } else if(value.compare("gone")==0) {
-            if(people == 0) {
+            if(people == 0 && cold && dark) {
                 std::cout << "The world may be vast, but there is no one here. The nomads are gone.\n";
                 return true;
             }

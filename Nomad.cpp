@@ -3,6 +3,7 @@
 class Nomad {
     int people;
     bool love, wind, greed, humid, gold, religion, gun, plague, renaissance, love, Aliens = false;
+    bool cold, dark, hot, light = false;
 
     Nomad() {
         people = 3;
@@ -92,16 +93,40 @@ class Nomad {
                     std::cout << "People are becomming less and less creative.\n";
                 }
             }
-           
+            if(value.compare("cold")==0) {
+                cold = !cold;
+                if(cold) {
+                    std::cout << "The world is becoming very cold.\n";
+                } else {
+                    std::cout << "The frost is melting away.\n";
+                }
+            } if(value.compare("hot")==0) {
+                hot != hot;
+                if(hot) {
+                    std::cout << "The world is becoming increasingly warm.\n";
+                } else {
+                    std::cout << "The heat is dying down.\n";
+                }
+            } if(value.compare("dark")==0) {
+                dark != dark;
+                if(dark) {
+                    std::cout << "The world is getting dark.\n";
+                } else {
+                    std::cout << "The darkness is subsiding.\n";
+                }
+            } if(value.compare("light")==0) {
+                light != light;
+                if(light) {
+                    std::cout << "The world is very bright.\n";
+                } else {
+                    std::cout << "The brightness is subsiding.\n";
+                }
+            }
                        // Advanced events
             if(value.compare("blizzard")==0) {
-                if(wind) {
-                    std::cout << "A blizzard has struck the civilization.\n";
-                    if(people != 0) {
-                        people -= 1;
-                    } else {
-                        std::cout << "but everyone is already gone...\n";
-                    }
+                if(wind && cold) {
+                    std::cout << "The nomads noticed the weather changing and moved to somewhere warmer.\n";
+                    
                 }
             } if(value.compare("warAlien") == 0) {
                 if(gun && Aliens && greed) {
@@ -121,13 +146,9 @@ class Nomad {
                     }
                 }
             } if(value.compare("heatStroke")==0) {
-                if(humid) {
-                    std::cout << "The civilization is unprepared for the heat.\n";
-                    if(people != 0) {
-                        people -= 1;
-                    } else {
-                        std::cout << "but everyone is already gone...\n";
-                    }
+                if(humid && hot) {
+                    std::cout << "The nomads noticed the weather getting warmer and moved north.\n";
+                    
                 }
             } if(value.compare("warReligion")==0) {
                 if(gun && religion) {
@@ -137,7 +158,7 @@ class Nomad {
                     }
                 }
             } if(value.compare("plagueDeaths")==0) {
-                if(plague) {
+                if(plague && cold) {
                     std::cout << "The sickness is worstening during these harsh winters.\n";
                     if(people != 0) {
                         people -= 1;
@@ -153,7 +174,7 @@ class Nomad {
                     }
                 }
             } if(value.compare("abducted")==0) {
-                if(Aliens) {
+                if(Aliens && dark) {
                     std::cout << "Someone has gone missing, the Aliens claim the didn't do it.\n";
                     people -= 1;
                     if (people <= 0) {
@@ -177,10 +198,12 @@ class Nomad {
                     }
                 }
             } if(value.compare("GunLove")==0) {
+                if(gun && love) {
                 std::cout << "People sure love their guns.\n";
                 people -= 1;
                 if(people < 0) {
                     people =0 ;
+                }
                 }
             }
             
@@ -200,7 +223,7 @@ class Nomad {
         }
 
         } else if(value.compare("christmas")==0) {
-            if(religion && love) {
+            if(religion && love && cold) {
             std::cout << "Its a beautiful snowy day and the nomadic covilization is giving gifts to each other.\n";
             return true;
             }
@@ -220,12 +243,12 @@ class Nomad {
             }
 
         } else if(value.compare("warming")==0) {
-            if(humid && wind) {
+            if(humid && wind && hot) {
             std::cout << "The world is slowing warming up. This may be a problem, but not the nomads problem.\n";
             return true;
             }
         } else if(value.compare("gone")==0) {
-            if(people == 0) {
+            if(people == 0 && dark && cold) {
                 std::cout << "The world may be vast, but there is no one here. The nomads are gone.\n";
                 return true;
             }
