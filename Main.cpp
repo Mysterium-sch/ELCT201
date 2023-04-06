@@ -9,12 +9,11 @@
 AnalogIn LightSensor(PTB0);
 AnalogIn TemperatureSensor(PTB1);
 AnalogIn TorqueSensor(PTB2);
-
 InterruptIn UniverseRestart(PTD4);
 InterruptIn WorldRefresh(PTA12);
 InterruptIn Volcano(PTA4);
 
-DigitalOut OUTPUT(PTC2);
+DigitalOut OUTPUT();
 
 DigitalOut LED_1();
 DigitalOut LED_2();
@@ -66,16 +65,28 @@ float MotorCurrent; //computed from the voltage value
 #define MotorSeriesResistance 10.0f //resistance of torque (current) sensing resistor in series with the Motor
 
 // Variables to hold control reference values.
+//Need to make them based off of environment
 float LightBrightResistanceLimit = 1600.0; // Bright level
 float LightDarkResistanceLimit = 5000.0; //Dark level
 float TemperatureHotLimit = 27.0; // Overheat level
 float TemperatureColdLimit = 15.0; //Too cold level
 float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor torque deactivation
 
+//Classes
+Nomad Nomad();
+Modern Modern();
+Advanced Advanced();
+
+//Global Variables
+bool endN[10] = [false,false,false,false,false,false,false,false,false,false];
+bool endM[10] = [false,false,false,false,false,false,false,false,false,false];
+bool endA[10] = [false,false,false,false,false,false,false,false,false,false];
+bool gameOver = false;
+
 // This function will be attached to the World Refresh button interrupt.
 void WorldRefresh(void)
 {
-    //cout << "On to the next world" << endl;
+    cout << "On to the next world!" << endl;
     //refresh lights
     LED_1 = 1;
     LED_2 = 1;
@@ -86,12 +97,19 @@ void WorldRefresh(void)
     LED_7 = 1;
     LED_8 = 1;
     LED_9 = 1;
+    LED_N = 0;
+    LED_M = 0;
+    LED_A = 0;
+    //New Classes
+    Nomad = new Nomad();
+    Modern = new Modern();
+    Advanced = new Advanced();
 }
 
 // This function will be attached to the Universe Refresh button interrupt.
 void UniverseRestart(void)
 {
-    //cout << "Clean slate: you can now start the game over" << endl;
+    cout << "Clean slate: you can now start the training simulation over" << endl;
     //refresh lights
     LED_1 = 1;
     LED_2 = 1;
@@ -102,19 +120,28 @@ void UniverseRestart(void)
     LED_7 = 1;
     LED_8 = 1;
     LED_9 = 1;
-    //take away booleans/memories
-	
+    LED_N = 0;
+    LED_M = 0;
+    LED_A = 0;
+    //New Classes
+    Nomad = new Nomad();
+    Modern = new Modern();
+    Advanced = new Advanced();
+    //Reset Endings
+    endN[10] = [false,false,false,false,false,false,false,false,false,false];
+    endM[10] = [false,false,false,false,false,false,false,false,false,false];
+    endA[10] = [false,false,false,false,false,false,false,false,false,false];
+    bool gameOver = false;
 }
 void Volcano(void)
 {
-    //std::string torque = CheckTorqueSensor();
-    srand(time(0));
+	srand(time(0));
     while(true) {
        if((rand() % (1000 + 1)) == 0) {
         OUTPUT = 1;
         for(int i = 0; i<10; i++) {
             CheckTorqueSensor();
-            if(OUTPUT ==1) {
+            if(OUTPUT == 1) {
                 i=11;
                 OUTPUT = 0;
             } else {
@@ -124,7 +151,38 @@ void Volcano(void)
        }
        wait_us(1000000);
     }
-	
+}
+bool endingsTracker() {
+
+    std::string endings[10] = ["peace", "god", "christmas", "cultural","nothing", "greedy", "before", "warming", "gone"];
+    for(int i = 0; i<(endings.size()-1);i++) {
+        if(Nomad.endHandler(endings[i])) {
+            end[i] = true;
+            i = 10;
+        }
+        else if(Modern.endHandler(endings[i])) {
+            end[i] = true;
+            i = 10;
+        }
+        else if(Advanced.endHandler(endings[i])) {
+            end[i] = true;
+            i = 10;
+        }
+        //gone
+        else if(Nomad.endHandler("gone") && Modern.endHandler("gone") && Advanced.endHandler("gone")) {
+            end[9] = true;
+            i = 10;
+        }
+    }
+    //check if all true
+    bool done = true;
+    for(int i = 0; i<(endings.size());i++) {
+        if(!end[i]) {
+            return false;
+        }
+    }
+    return true;
+
 }
 
 //convert the input voltage from the light sensor to an LDR resistance value
@@ -137,25 +195,6 @@ float getPhotoResistance(void)
     LdrResistance = LdrBiasResistor*((Vsupply - LightSensorVoltValue) / LightSensorVoltValue); //voltage divider equation to determine LDR resistance
 
     return LdrResistance;
-}
-float getMotorCurrent(void)
-{
-
-    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
-    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
-    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
-    
-    return MotorCurrent;
-}
-
-// This function will check the Over Torque analog input.
-void CheckTorqueSensor(void)
-{
-
-     if(getMotorCurrent() >= MotorCurrentLimit) {
-        OUTPUT = 1;
-    }
-
 }
 
 // This function will check the LDR analog input.
@@ -187,8 +226,6 @@ float getThermistorTemperature(void)
 //This function will check for a temperature triggered deactivation of the motor
 std::string CheckTemperatureSensor(void)
 {
-    // STUDENT: EDIT HERE
-    // Use the getThermistorTemperature() function defined above to obtain a temperature value to use for comparison and decision making with your TemperatureLimit
     if(getThermistorTemperature() >= TemperatureHotLimit) {
          return "hot";
     }
@@ -197,6 +234,23 @@ std::string CheckTemperatureSensor(void)
     }
     else {
         return "no";
+    }
+}
+float getMotorCurrent(void)
+{
+
+    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
+    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
+    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
+
+    return MotorCurrent;
+}
+
+// This function will check the Over Torque analog input.
+void CheckTorqueSensor(void)
+{
+     if(getMotorCurrent() >= MotorCurrentLimit) {
+        OUTPUT = 1;
     }
 }
 
@@ -349,6 +403,7 @@ void Events(std::string place, std::string outcome) {
 // Standard entry point in C++.
 int main(void)
 {
+    std::cout << "Welcome, please see the training box for further instructions.\n";
     // Attach the functions to the hardware interrupt pins.
     WorldRefresh.rise(&WorldRefresh);
     UniverseRestart.rise(&UniverseRestart);
@@ -358,13 +413,14 @@ int main(void)
     GREEN_LED = 1;
     BLUE_LED = 1;
     
-    while(true) {
+    while(!gameOver) {
         // Check the analog inputs.
         std::string outcome = CheckButton();
         std::string place = CheckPlace();
         Events(place, outcome);
-        
+        gameOver = endHandler();
         wait(1.0); // Wait 1 second before repeating the loop.
     }
+    std::cout << "You have completed your training. You are welcomed to Godhood."<< std::endl;
 }
 // End of HardwareInterruptSeedCode
