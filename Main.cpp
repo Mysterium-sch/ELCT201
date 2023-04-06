@@ -72,7 +72,7 @@ float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor 
 // This function will be attached to the World Refresh button interrupt.
 void WorldRefresh(void)
 {
-    cout << "On to the next world" << endl;
+    //cout << "On to the next world" << endl;
     //refresh lights
     LED_1 = 1;
     LED_2 = 1;
@@ -88,7 +88,7 @@ void WorldRefresh(void)
 // This function will be attached to the Universe Refresh button interrupt.
 void UniverseRestart(void)
 {
-    cout << "Clean slate: you can now start the game over" << endl;
+    //cout << "Clean slate: you can now start the game over" << endl;
     //refresh lights
     LED_1 = 1;
     LED_2 = 1;
@@ -100,6 +100,11 @@ void UniverseRestart(void)
     LED_8 = 1;
     LED_9 = 1;
     //take away booleans/memories
+	
+}
+void Volcano(void)
+{
+	//std::string torque = CheckTorqueSensor();
 	
 }
 
@@ -167,10 +172,10 @@ String CheckButton(void) {
         outcome = CheckTemperatureSensor();
         return outcome;
     }
-    if(CheckTorqueSensor().compare("no") != 0) {
+    /*if(CheckTorqueSensor().compare("no") != 0) {
         outcome = CheckTorqueSensor();
         return outcome;
-    }
+    }*/
     if(Wind.read() == 0) {
         return "wind";
     }
@@ -313,6 +318,7 @@ int main(void)
     // Attach the functions to the hardware interrupt pins.
     WorldRefresh.rise(&WorldRefresh);
     UniverseRestart.rise(&UniverseRestart);
+    Volcano.rise(&Volcano);
     // Initialize LED outputs to OFF (LED logic is inverted)
     RED_LED = 1;
     GREEN_LED = 1;
