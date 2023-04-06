@@ -9,9 +9,12 @@
 AnalogIn LightSensor(PTB0);
 AnalogIn TemperatureSensor(PTB1);
 AnalogIn TorqueSensor(PTB2);
+
 InterruptIn UniverseRestart(PTD4);
 InterruptIn WorldRefresh(PTA12);
 InterruptIn Volcano(PTA4);
+
+DigitalOut OUTPUT(PTC2);
 
 DigitalOut LED_1();
 DigitalOut LED_2();
@@ -104,7 +107,23 @@ void UniverseRestart(void)
 }
 void Volcano(void)
 {
-	//std::string torque = CheckTorqueSensor();
+    //std::string torque = CheckTorqueSensor();
+    srand(time(0));
+    while(true) {
+       if((rand() % (1000 + 1)) == 0) {
+        OUTPUT = 1;
+        for(int i = 0; i<10; i++) {
+            CheckTorqueSensor();
+            if(OUTPUT ==1) {
+                i=11;
+                OUTPUT = 0;
+            } else {
+                wait_us(1000000);
+            }
+        }
+       }
+       wait_us(1000000);
+    }
 	
 }
 
@@ -118,6 +137,25 @@ float getPhotoResistance(void)
     LdrResistance = LdrBiasResistor*((Vsupply - LightSensorVoltValue) / LightSensorVoltValue); //voltage divider equation to determine LDR resistance
 
     return LdrResistance;
+}
+float getMotorCurrent(void)
+{
+
+    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
+    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
+    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
+    
+    return MotorCurrent;
+}
+
+// This function will check the Over Torque analog input.
+void CheckTorqueSensor(void)
+{
+
+     if(getMotorCurrent() >= MotorCurrentLimit) {
+        OUTPUT = 1;
+    }
+
 }
 
 // This function will check the LDR analog input.
@@ -172,10 +210,6 @@ String CheckButton(void) {
         outcome = CheckTemperatureSensor();
         return outcome;
     }
-    /*if(CheckTorqueSensor().compare("no") != 0) {
-        outcome = CheckTorqueSensor();
-        return outcome;
-    }*/
     if(Wind.read() == 0) {
         return "wind";
     }
