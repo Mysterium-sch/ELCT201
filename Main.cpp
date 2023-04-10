@@ -1,8 +1,8 @@
 // Last edit 03/09/2023 by Valerie Duffey
 #include "mbed.h"
-#include "Nomad.cpp"
-#include "Modern.cpp"
-#include "Advanced.cpp"
+#include "Nomad.h"
+#include "Modern.h"
+#include "Advanced.h"
 #include <iostream>
 
 //NEED CORRECT PIN NUMBERS
@@ -78,9 +78,9 @@ float TemperatureColdLimit = 15.0; //Too cold level
 float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor torque deactivation
 
 //Classes
-Nomad Nomad();
-Modern Modern();
-Advanced Advanced();
+Nomad *nomad = new Nomad();
+Modern *modern = new Modern();
+Advanced *advanced = new Advanced();
 
 //Global Variables
 float roomTemp;
@@ -94,6 +94,9 @@ bool gameOver = false;
 void WorldRefresh(void)
 {
     cout << "On to the next world!" << endl;
+    delete nomad;
+    delete modern;
+    delete advanced;
     //refresh lights
     LED_1 = 1;
     LED_2 = 1;
@@ -108,15 +111,18 @@ void WorldRefresh(void)
     LED_M = 0;
     LED_A = 0;
     //New Classes
-    /*Nomad = new Nomad();
-    Modern = new Modern();
-    Advanced = new Advanced();*/
+    nomad = new Nomad();
+    modern = new Modern();
+    advanced = new Advanced();
 }
 
 // This function will be attached to the Universe Refresh button interrupt.
 void UniverseRestart(void)
 {
     cout << "Clean slate: you can now start the training simulation over" << endl;
+    delete nomad;
+    delete modern;
+    delete advanced;
     //refresh lights
     LED_1 = 1;
     LED_2 = 1;
@@ -131,9 +137,9 @@ void UniverseRestart(void)
     LED_M = 0;
     LED_A = 0;
     //New Classes
-    /*Nomad = new Nomad();
-    Modern = new Modern();
-    Advanced = new Advanced();*/
+    nomad = new Nomad();
+    modern = new Modern();
+    advanced = new Advanced();
     //Reset Endings
     endN[10] = [false,false,false,false,false,false,false,false,false,false];
     endM[10] = [false,false,false,false,false,false,false,false,false,false];
@@ -163,20 +169,20 @@ bool endingsTracker() {
 
     std::string endings[10] = ["peace", "god", "christmas", "cultural","nothing", "greedy", "before", "warming", "gone"];
     for(int i = 0; i<(endings.size()-1);i++) {
-        if(Nomad.endHandler(endings[i])) {
+        if(nomad.endHandler(endings[i])) {
             end[i] = true;
             i = 10;
         }
-        else if(Modern.endHandler(endings[i])) {
+        else if(modern.endHandler(endings[i])) {
             end[i] = true;
             i = 10;
         }
-        else if(Advanced.endHandler(endings[i])) {
+        else if(advanced.endHandler(endings[i])) {
             end[i] = true;
             i = 10;
         }
         //gone
-        else if(Nomad.endHandler("gone") && Modern.endHandler("gone") && Advanced.endHandler("gone")) {
+        else if(nomad.endHandler("gone") && modern.endHandler("gone") && advanced.endHandler("gone")) {
             end[9] = true;
             i = 10;
         }
@@ -257,7 +263,7 @@ float getMotorCurrent(void)
 void CheckTorqueSensor(void)
 {
      if(getMotorCurrent() >= MotorCurrentLimit) {
-        OUTPUT = 1;
+        OutputMotor = 1;
     }
 }
 
@@ -323,8 +329,8 @@ void Events(std::string place, std::string outcome) {
             LED_M = 1;
             LED_A = 1;
             if(outcome != "no") {
-                Nomad.eventHandler(outcome);
-                people = Nomad.getPeople();
+                nomad.eventHandler(outcome);
+                people = nomad.getPeople();
                 if(people == 0) {
                     LED_1 = 1;
                     LED_2 = 1;
@@ -352,8 +358,8 @@ void Events(std::string place, std::string outcome) {
             LED_N = 1;
             LED_A = 1;
             if(outcome != "no") {
-                Modern.eventHandler(outcome);
-                people = Modern.getPeople();
+                modern.eventHandler(outcome);
+                people = modern.getPeople();
                 if(people == 0) {
                     LED_4 = 1;
                     LED_5 = 1;
@@ -381,8 +387,8 @@ void Events(std::string place, std::string outcome) {
             LED_M = 1;
             LED_N = 1;
             if(outcome != "no") {
-                Advanced.eventHandler(outcome);
-                people = Advanced.getPeople();
+                advanced.eventHandler(outcome);
+                people = advanced.getPeople();
                 if(people == 0) {
                     LED_7 = 1;
                     LED_8 = 1;
