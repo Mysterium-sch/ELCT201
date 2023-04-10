@@ -44,9 +44,9 @@ DigitalIn Renaissance();
 DigitalIn Love();
 DigitalIn Aliens();
 
-DigitalIn Nomad();
-DigitalIn Modern();
-DigitalIn Advanced();
+DigitalIn NomadSelect();
+DigitalIn ModernSelect();
+DigitalIn AdvancedSelect();
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
@@ -303,13 +303,13 @@ String CheckButton(void) {
     }
 }
 String CheckPlace(void) {
-    if(Nomad.read() == 0) {
+    if(NomadSelect.read() == 0) {
         return "Nomad";
     }
-    if(Modern.read() == 0) { 
+    if(ModernSelect.read() == 0) { 
         return "Modern";
     }
-    if(Advanced.read() == 0) {
+    if(AdvancedSelect.read() == 0) {
         return "Advanced"; 
     }
     else {
