@@ -98,18 +98,18 @@ void WorldRefresh(void)
     delete modern;
     delete advanced;
     //refresh lights
-    LED_1 = 1;
-    LED_2 = 1;
-    LED_3 = 1;
-    LED_4 = 1;
-    LED_5 = 1;
-    LED_6 = 1;
-    LED_7 = 1;
-    LED_8 = 1;
-    LED_9 = 1;
-    LED_N = 0;
-    LED_M = 0;
-    LED_A = 0;
+    LED_1 = 0;
+    LED_2 = 0;
+    LED_3 = 0;
+    LED_4 = 0;
+    LED_5 = 0;
+    LED_6 = 0;
+    LED_7 = 0;
+    LED_8 = 0;
+    LED_9 = 0;
+    LED_N = 1;
+    LED_M = 1;
+    LED_A = 1;
     //New Classes
     nomad = new Nomad();
     modern = new Modern();
@@ -124,18 +124,18 @@ void UniverseRestart(void)
     delete modern;
     delete advanced;
     //refresh lights
-    LED_1 = 1;
-    LED_2 = 1;
-    LED_3 = 1;
-    LED_4 = 1;
-    LED_5 = 1;
-    LED_6 = 1;
-    LED_7 = 1;
-    LED_8 = 1;
-    LED_9 = 1;
-    LED_N = 0;
-    LED_M = 0;
-    LED_A = 0;
+    LED_1 = 0;
+    LED_2 = 0;
+    LED_3 = 0;
+    LED_4 = 0;
+    LED_5 = 0;
+    LED_6 = 0;
+    LED_7 = 0;
+    LED_8 = 0;
+    LED_9 = 0;
+    LED_N = 1;
+    LED_M = 1;
+    LED_A = 1;
     //New Classes
     nomad = new Nomad();
     modern = new Modern();
