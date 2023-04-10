@@ -13,21 +13,26 @@ InterruptIn UniverseRestart(PTD4);
 InterruptIn WorldRefresh(PTA12);
 InterruptIn Volcano(PTA4);
 
-DigitalOut OUTPUT();
+DigitalOut OutputMotor(PTC2);
 
-DigitalOut LED_1();
-DigitalOut LED_2();
-DigitalOut LED_3();
-DigitalOut LED_4();
-DigitalOut LED_5();
-DigitalOut LED_6();
-DigitalOut LED_7();
-DigitalOut LED_8();
-DigitalOut LED_9();
+DigitalOut LED_1(PTB11);
+DigitalOut LED_2(PTE2);
+DigitalOut LED_3(PTE3);
+DigitalOut LED_4(PTE4);
+DigitalOut LED_5(PTE5);
+DigitalOut LED_6(PTC9);
+DigitalOut LED_7(PTC8);
+DigitalOut LED_8(PTA5);
+DigitalOut LED_9(PTA4);
 
-DigitalOut LED_N();
-DigitalOut LED_M();
-DigitalOut LED_A();
+DigitalOut LED_N(PTB8);
+DigitalOut LED_M(PTB9);
+DigitalOut LED_A(PTB10);
+
+DigitalOut TemperatureHotLED(PTE20);
+DigitalOut TemperatureColdLED(PTE21);
+DigitalOut PhotoHigh(PTE29);
+DigitalOut PhotoDark(PTE30);
 
 DigitalIn Wind();
 DigitalIn Humid();
@@ -78,6 +83,8 @@ Modern Modern();
 Advanced Advanced();
 
 //Global Variables
+float roomTemp;
+float roomLight;
 bool endN[10] = [false,false,false,false,false,false,false,false,false,false];
 bool endM[10] = [false,false,false,false,false,false,false,false,false,false];
 bool endA[10] = [false,false,false,false,false,false,false,false,false,false];
@@ -101,9 +108,9 @@ void WorldRefresh(void)
     LED_M = 0;
     LED_A = 0;
     //New Classes
-    Nomad = new Nomad();
+    /*Nomad = new Nomad();
     Modern = new Modern();
-    Advanced = new Advanced();
+    Advanced = new Advanced();*/
 }
 
 // This function will be attached to the Universe Refresh button interrupt.
@@ -124,9 +131,9 @@ void UniverseRestart(void)
     LED_M = 0;
     LED_A = 0;
     //New Classes
-    Nomad = new Nomad();
+    /*Nomad = new Nomad();
     Modern = new Modern();
-    Advanced = new Advanced();
+    Advanced = new Advanced();*/
     //Reset Endings
     endN[10] = [false,false,false,false,false,false,false,false,false,false];
     endM[10] = [false,false,false,false,false,false,false,false,false,false];
@@ -138,12 +145,12 @@ void Volcano(void)
 	srand(time(0));
     while(true) {
        if((rand() % (1000 + 1)) == 0) {
-        OUTPUT = 1;
+        OutputMotor = 1;
         for(int i = 0; i<10; i++) {
             CheckTorqueSensor();
-            if(OUTPUT == 1) {
+            if(OutputMotor == 1) {
                 i=11;
-                OUTPUT = 0;
+                OutputMotor = 0;
             } else {
                 wait_us(1000000);
             }
@@ -399,6 +406,15 @@ void Events(std::string place, std::string outcome) {
             }
         }
 }
+void setRoomValues(void) {
+	roomTemp = getThermistorTemperature();
+	roomLight = getPhotoResistance();
+		
+	LightBrightResistanceLimit = roomLight - 1000;
+	LightDarkResistanceLimit = roomLight+1000;
+	TemperatureHotLimit = roomTemp+10;
+	TemperatureColdLimit = roomTemp-10;
+}
 
 // Standard entry point in C++.
 int main(void)
@@ -412,7 +428,8 @@ int main(void)
     RED_LED = 1;
     GREEN_LED = 1;
     BLUE_LED = 1;
-    
+    setRoomValues();
+
     while(!gameOver) {
         // Check the analog inputs.
         std::string outcome = CheckButton();
