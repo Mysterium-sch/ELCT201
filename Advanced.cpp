@@ -1,18 +1,14 @@
-#include <iostream>
+#include "Advanced.h"
 
-class Advanced {
-    int people;
-    bool wind, greed, humid, gold, religion, gun, plague, renaissance, love, Aliens = false;
-    bool cold, dark, hot, light = false;
-    Advanced() {
+    Advanced::Advanced() {
         people = 3;
     }
 
-    int getPeople() {
+    int Advanced::getPeople() {
         return people;
     }
 
-    void eventHandler(std::string value) {
+    void Advanced::eventHandler(std::string value) {
             if(value.compare("volcano")==0) {
             std::cout << "The volcano devastated the advanced people and wiped out their civilization.\n";
             people =0;
@@ -204,7 +200,7 @@ class Advanced {
     }
             
     
-        bool endHandler(std::string value) {
+        bool Advanced::endHandler(std::string value) {
         if(value.compare("peace") == 0) {
             if(people == 3 && love && renaissance) {
                 std::cout << "This advanced civilization is in harmony and peace.\n";
@@ -248,4 +244,3 @@ class Advanced {
         return false;
     }
 
-};

@@ -1,19 +1,14 @@
-#include <iostream>
+#include "Nomad.h"
 
-class Nomad {
-    int people;
-    bool love, wind, greed, humid, gold, religion, gun, plague, renaissance, love, Aliens = false;
-    bool cold, dark, hot, light = false;
-
-    Nomad() {
+    Nomad::Nomad() {
         people = 3;
     }
 
-    int getPeople() {
+    int Nomad::getPeople() {
         return people;
     }
 
-    void eventHandler(std::string value) {
+    void Nomad::eventHandler(std::string value) {
             if(value.compare("volcano")==0) {
             std::cout << "The volcano devastated the nomadic people and wiped out their civilization.\n";
             people =0;
@@ -210,7 +205,7 @@ class Nomad {
            
             }
 
-    bool endHandler(std::string value) {
+    bool Nomad::endHandler(std::string value) {
         if(value.compare("peace") == 0) {
             if(people == 3 && love && renaissance) {
                 std::cout << "This nomadic civilization is in harmony and peace.\n";
@@ -255,4 +250,3 @@ class Nomad {
         }
         return false;
     }
-};

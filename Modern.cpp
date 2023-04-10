@@ -1,10 +1,6 @@
-#include <iostream>
+#include "Modern.h"
 
-class Modern {
-    int people;
-    bool love, wind, greed, humid, gold, religion, gun, plague, renaissance, love, Aliens = false;
-    bool cold, dark, hot, light = false;
-    Modern() {
+    Modern::Modern() {
         people = 3;
     }
 
@@ -12,7 +8,7 @@ class Modern {
         return people;
     }
 
-    void eventHandler(std::string value) {
+    void Modern::eventHandler(std::string value) {
             if(value.compare("volcano")==0) {
             std::cout << "The volcano devastated the modern people and wiped out their civilization.\n";
             people =0;
@@ -203,7 +199,7 @@ class Modern {
             
             }
 
-        bool endHandler(std::string value) {
+        bool Modern::endHandler(std::string value) {
         if(value.compare("peace") == 0) {
             if(people == 3 && love && renaissance) {
                 std::cout << "This modern civilization is in harmony and peace.\n";
@@ -254,4 +250,3 @@ class Modern {
         }
         return false;
     }
-};
