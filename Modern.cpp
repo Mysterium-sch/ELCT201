@@ -4,7 +4,7 @@
         people = 3;
     }
 
-        int getPeople() {
+    int getPeople() {
         return people;
     }
 

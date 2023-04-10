@@ -4,9 +4,9 @@
 #include "mbed.h"
 
 
-class Advacned {
+class Advanced {
     public:
-    Advacned();
+    Advanced();
     int getPeople();
     void eventHandler(std::string value);
     bool endHandler(std::string value);
