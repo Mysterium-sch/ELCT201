@@ -1,9 +1,12 @@
 // Last edit 03/09/2023 by Valerie Duffey
 #include "mbed.h"
-#include "Nomad.cpp"
-#include "Modern.cpp"
-#include "Advanced.cpp"
 #include <iostream>
+#include "platform/mbed_thread.h"
+#include "Nomad.h"
+#include "Modern.h"
+#include "Advanced.h"
+#include <string>
+#include "tsi_sensor.h"
 
 //NEED CORRECT PIN NUMBERS
 AnalogIn LightSensor(PTB0);
@@ -34,19 +37,19 @@ DigitalOut TemperatureColdLED(PTE21);
 DigitalOut PhotoHigh(PTE29);
 DigitalOut PhotoDark(PTE30);
 
-DigitalIn Wind();
-DigitalIn Humid();
-DigitalIn Greed();
-DigitalIn Religion();
-DigitalIn GunPowder();
-DigitalIn Plague();
-DigitalIn Renaissance();
-DigitalIn Love();
-DigitalIn Aliens();
+InterruptIn Wind(PTC9);
+InterruptIn Humid(PTC8);
+InterruptIn Greed(PTA5);
+InterruptIn Religion(PTA4);
+InterruptIn GunPowder(PTC11);
+InterruptIn Plague(PTC10);
+InterruptIn Renaissance(PTC6);
+InterruptIn Love(PTC5);
+InterruptIn Aliens(PTC4);
 
-DigitalIn Nomad();
-DigitalIn Modern();
-DigitalIn Advanced();
+//InterruptIn NomadSelect(PTC3);
+//InterruptIn ModernSelect(PTD1);
+//InterruptIn AdvancedSelect(PTD3);
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
@@ -78,69 +81,101 @@ float TemperatureColdLimit = 15.0; //Too cold level
 float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor torque deactivation
 
 //Classes
-Nomad Nomad();
-Modern Modern();
-Advanced Advanced();
+Nomad *nomad = new Nomad();
+Modern *modern = new Modern();
+Advanced *advanced = new Advanced();
 
 //Global Variables
 float roomTemp;
 float roomLight;
-bool endN[10] = [false,false,false,false,false,false,false,false,false,false];
-bool endM[10] = [false,false,false,false,false,false,false,false,false,false];
-bool endA[10] = [false,false,false,false,false,false,false,false,false,false];
+bool ender[10] = {false,false,false,false,false,false,false,false,false,false};
 bool gameOver = false;
+string outcome;
 
 // This function will be attached to the World Refresh button interrupt.
-void WorldRefresh(void)
+void WorldRefresher(void)
 {
     cout << "On to the next world!" << endl;
+    delete nomad;
+    delete modern;
+    delete advanced;
     //refresh lights
-    LED_1 = 1;
-    LED_2 = 1;
-    LED_3 = 1;
-    LED_4 = 1;
-    LED_5 = 1;
-    LED_6 = 1;
-    LED_7 = 1;
-    LED_8 = 1;
-    LED_9 = 1;
-    LED_N = 0;
-    LED_M = 0;
-    LED_A = 0;
+    LED_1 = 0;
+    LED_2 = 0;
+    LED_3 = 0;
+    LED_4 = 0;
+    LED_5 = 0;
+    LED_6 = 0;
+    LED_7 = 0;
+    LED_8 = 0;
+    LED_9 = 0;
+    LED_N = 1;
+    LED_M = 1;
+    LED_A = 1;
     //New Classes
-    /*Nomad = new Nomad();
-    Modern = new Modern();
-    Advanced = new Advanced();*/
+    nomad = new Nomad();
+    modern = new Modern();
+    advanced = new Advanced();
+}
+void Winder(void) {
+	outcome = "wind";
+}
+void Humider(void) {
+	outcome = "humid";
+}
+void Greeder(void) {
+	outcome = "greed";
+}
+void Religioner(void) {
+	outcome = "religion";
+}
+void GunPowderer(void) {
+	outcome = "gun";
+}
+void Plaguer(void) {
+	outcome = "plague";
+}
+void Renaissancer(void) {
+	outcome = "renaissance";
+}
+void Lover(void) {
+	outcome = "love";
+}
+void Aliener(void) {
+	outcome = "alien";
 }
 
 // This function will be attached to the Universe Refresh button interrupt.
-void UniverseRestart(void)
+void UniverseRestarter(void)
 {
     cout << "Clean slate: you can now start the training simulation over" << endl;
+    delete nomad;
+    delete modern;
+    delete advanced;
     //refresh lights
-    LED_1 = 1;
-    LED_2 = 1;
-    LED_3 = 1;
-    LED_4 = 1;
-    LED_5 = 1;
-    LED_6 = 1;
-    LED_7 = 1;
-    LED_8 = 1;
-    LED_9 = 1;
-    LED_N = 0;
-    LED_M = 0;
-    LED_A = 0;
+    LED_1 = 0;
+    LED_2 = 0;
+    LED_3 = 0;
+    LED_4 = 0;
+    LED_5 = 0;
+    LED_6 = 0;
+    LED_7 = 0;
+    LED_8 = 0;
+    LED_9 = 0;
+    LED_N = 1;
+    LED_M = 1;
+    LED_A = 1;
     //New Classes
-    /*Nomad = new Nomad();
-    Modern = new Modern();
-    Advanced = new Advanced();*/
+    nomad = new Nomad();
+    modern = new Modern();
+    advanced = new Advanced();
     //Reset Endings
-    endN[10] = [false,false,false,false,false,false,false,false,false,false];
-    endM[10] = [false,false,false,false,false,false,false,false,false,false];
-    endA[10] = [false,false,false,false,false,false,false,false,false,false];
+    for(int i = 0; i<10; i++) {
+        ender[i] = false;
+    }
     bool gameOver = false;
 }
-void Volcano(void)
+void Volcanoy(void)
 {
 	srand(time(0));
     while(true) {
@@ -159,32 +194,50 @@ void Volcano(void)
        wait_us(1000000);
     }
 }
+
+float getMotorCurrent(void)
+{
+
+    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
+    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
+    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
+
+    return MotorCurrent;
+}
+
+// This function will check the Over Torque analog input.
+void CheckTorqueSensor(void)
+{
+     if(getMotorCurrent() >= MotorCurrentLimit) {
+        OutputMotor = 1;
+    }
+}
 bool endingsTracker() {
 
-    std::string endings[10] = ["peace", "god", "christmas", "cultural","nothing", "greedy", "before", "warming", "gone"];
-    for(int i = 0; i<(endings.size()-1);i++) {
-        if(Nomad.endHandler(endings[i])) {
-            end[i] = true;
+    string endings[10] = {"peace", "god", "christmas", "cultural","nothing", "greedy", "before", "warming", "gone"};
+    for(int i = 0; i<9;i++) {
+        if(nomad->endHandler(endings[i])) {
+            ender[i] = true;
             i = 10;
         }
-        else if(Modern.endHandler(endings[i])) {
-            end[i] = true;
+        else if(modern->endHandler(endings[i])) {
+            ender[i] = true;
             i = 10;
         }
-        else if(Advanced.endHandler(endings[i])) {
-            end[i] = true;
+        else if(advanced->endHandler(endings[i])) {
+            ender[i] = true;
             i = 10;
         }
         //gone
-        else if(Nomad.endHandler("gone") && Modern.endHandler("gone") && Advanced.endHandler("gone")) {
-            end[9] = true;
+        else if(nomad->endHandler("gone") && modern->endHandler("gone") && advanced->endHandler("gone")) {
+            ender[9] = true;
             i = 10;
         }
     }
     //check if all true
     bool done = true;
-    for(int i = 0; i<(endings.size());i++) {
-        if(!end[i]) {
+    for(int i = 0; i<10;i++) {
+        if(!ender[i]) {
             return false;
         }
     }
@@ -243,26 +296,9 @@ std::string CheckTemperatureSensor(void)
         return "no";
     }
 }
-float getMotorCurrent(void)
-{
 
-    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
-    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
-    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
-
-    return MotorCurrent;
-}
-
-// This function will check the Over Torque analog input.
-void CheckTorqueSensor(void)
-{
-     if(getMotorCurrent() >= MotorCurrentLimit) {
-        OUTPUT = 1;
-    }
-}
-
-String CheckButton(void) {
-    std::string outcome;
+string CheckSensor(void) {
+    std::string outcome = "no";
     if(CheckLightSensor().compare("no") != 0) {
         outcome = CheckLightSensor();
         return outcome;
@@ -271,51 +307,9 @@ String CheckButton(void) {
         outcome = CheckTemperatureSensor();
         return outcome;
     }
-    if(Wind.read() == 0) {
-        return "wind";
-    }
-    if(Humid.read() == 0) { 
-        return "humid";
-    }
-    if(Greed.read() == 0) {
-        return "greed"; 
-    }
-    if(Religion.read() == 0) { 
-        return "religion"
-    }
-    if(GunPowder.read() == 0) { 
-        return "gun";
-    }
-    if(Plague.read() == 0) { 
-        return "plague";
-    }
-    if(Renaissance.read() == 0) { 
-        return "renaissance";
-    }
-    if(Love.read() == 0) { 
-        return "love";
-    }
-    if(Aliens.read() == 0) { 
-        return "Aliens";
-    }
-    else {
-        return "no";
-    }
+    return outcome;
 }
-String CheckPlace(void) {
-    if(Nomad.read() == 0) {
-        return "Nomad";
-    }
-    if(Modern.read() == 0) { 
-        return "Modern";
-    }
-    if(Advanced.read() == 0) {
-        return "Advanced"; 
-    }
-    else {
-        return "no";
-    }
-}
+
 void Events(std::string place, std::string outcome) {
     int people;
     if(place.compare("Nomad") == 0) {
@@ -323,24 +317,24 @@ void Events(std::string place, std::string outcome) {
             LED_M = 1;
             LED_A = 1;
             if(outcome != "no") {
-                Nomad.eventHandler(outcome);
-                people = Nomad.getPeople();
+                nomad->eventHandler(outcome);
+                people = nomad->getPeople();
                 if(people == 0) {
                     LED_1 = 1;
                     LED_2 = 1;
                     LED_3 = 1;
                 }
-                if(people = 1) {
+                if(people == 1) {
                     LED_1 = 0;
                     LED_2 = 1;
                     LED_3 = 1;
                 }
-                if(people = 2) {
+                if(people == 2) {
                     LED_1 = 0;
                     LED_2 = 0;
                     LED_3 = 1;
                 }
-                if(people = 3) {
+                if(people == 3) {
                     LED_1 = 0;
                     LED_2 = 0;
                     LED_3 = 0;
@@ -352,24 +346,24 @@ void Events(std::string place, std::string outcome) {
             LED_N = 1;
             LED_A = 1;
             if(outcome != "no") {
-                Modern.eventHandler(outcome);
-                people = Modern.getPeople();
+                modern->eventHandler(outcome);
+                people = modern->getPeople();
                 if(people == 0) {
                     LED_4 = 1;
                     LED_5 = 1;
                     LED_6 = 1;
                 }
-                if(people = 1) {
+                if(people == 1) {
                     LED_4 = 0;
                     LED_5 = 1;
                     LED_6 = 1;
                 }
-                if(people = 2) {
+                if(people == 2) {
                     LED_4 = 0;
                     LED_5 = 0;
                     LED_6 = 1;
                 }
-                if(people = 3) {
+                if(people == 3) {
                     LED_4 = 0;
                     LED_5 = 0;
                     LED_6 = 0;
@@ -381,24 +375,24 @@ void Events(std::string place, std::string outcome) {
             LED_M = 1;
             LED_N = 1;
             if(outcome != "no") {
-                Advanced.eventHandler(outcome);
-                people = Advanced.getPeople();
+                advanced->eventHandler(outcome);
+                people = advanced->getPeople();
                 if(people == 0) {
                     LED_7 = 1;
                     LED_8 = 1;
                     LED_9 = 1;
                 }
-                if(people = 1) {
+                if(people == 1) {
                     LED_7 = 0;
                     LED_8 = 1;
                     LED_9 = 1;
                 }
-                if(people = 2) {
+                if(people == 2) {
                     LED_7 = 0;
                     LED_8 = 0;
                     LED_9 = 1;
                 }
-                if(people = 3) {
+                if(people == 3) {
                     LED_7 = 0;
                     LED_8 = 0;
                     LED_9 = 0;
@@ -421,22 +415,42 @@ int main(void)
 {
     std::cout << "Welcome, please see the training box for further instructions.\n";
     // Attach the functions to the hardware interrupt pins.
-    WorldRefresh.rise(&WorldRefresh);
-    UniverseRestart.rise(&UniverseRestart);
-    Volcano.rise(&Volcano);
+    WorldRefresh.rise(&WorldRefresher);
+    UniverseRestart.rise(&UniverseRestarter);
+    Volcano.rise(&Volcanoy);
+//Buttons
+    Wind.rise(&Winder);
+    Humid.rise(&Humider);
+    Greed.rise(&Greeder);
+    Religion.rise(&Religioner);
+    GunPowder.rise(&GunPowderer);
+    Plague.rise(&Plaguer);
+    Renaissance.rise(&Renaissancer);
+    Love.rise(&Lover);
+    Aliens.rise(&Aliener);
     // Initialize LED outputs to OFF (LED logic is inverted)
-    RED_LED = 1;
-    GREEN_LED = 1;
-    BLUE_LED = 1;
     setRoomValues();
+    TSIAnalogSlider tsi(9, 10, 40);
 
     while(!gameOver) {
+	    float holder = tsi.readPercentage();
+        string place = "no";
+        if(holder <= 0.30) {  
+            place = "Nomad";
+        } else if (holder >= 0.60){
+            place = "Advanced";
+        } else {
+            place = "Modern";
+        }
         // Check the analog inputs.
-        std::string outcome = CheckButton();
-        std::string place = CheckPlace();
+	string sensor = CheckSensor();
+	if(sensor.compare("no") != 0) {
+		outcome = sensor;
+	}
         Events(place, outcome);
-        gameOver = endHandler();
-        wait(1.0); // Wait 1 second before repeating the loop.
+	outcome = "no";
+        gameOver = endingsTracker();
+        wait_us(1000000); // Wait 1 second before repeating the loop.
     }
     std::cout << "You have completed your training. You are welcomed to Godhood."<< std::endl;
 }
