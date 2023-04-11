@@ -90,6 +90,7 @@ float roomTemp;
 float roomLight;
 bool ender[10] = {false,false,false,false,false,false,false,false,false,false};
 bool gameOver = false;
+std::string outcome;
 
 // This function will be attached to the World Refresh button interrupt.
 void WorldRefresher(void)
@@ -116,23 +117,32 @@ void WorldRefresher(void)
     modern = new Modern();
     advanced = new Advanced();
 }
-string Winder(void) {
+void Winder(void) {
+	outcome = "wind";
 }
-string Humider(void) {
+void Humider(void) {
+	outcome = "humid";
 }
-string Greeder(void) {
+void Greeder(void) {
+	outcome = "greed";
 }
-string Religioner(void) {
+void Religioner(void) {
+	outcome = "religion";
 }
-string GunPowderer(void) {
+void GunPowderer(void) {
+	outcome = "gun";
 }
-string Plaguer(void) {
+void Plaguer(void) {
+	outcome = "plague";
 }
-string Renaissancer(void) {
+void Renaissancer(void) {
+	outcome = "renaissance";
 }
-string Lover(void) {
+void Lover(void) {
+	outcome = "love";
 }
-string Aliener(void) {
+void Aliener(void) {
+	outcome = "alien";
 }
 
 // This function will be attached to the Universe Refresh button interrupt.
@@ -168,6 +178,7 @@ void UniverseRestarter(void)
 void Volcanoy(void)
 {
 	srand(time(0));
+    while(true) {
        if((rand() % (1000 + 1)) == 0) {
         OutputMotor = 1;
         for(int i = 0; i<10; i++) {
@@ -180,7 +191,9 @@ void Volcanoy(void)
             }
         }
        }
-      
+       wait_us(1000000);
+    }
+}
 
 float getMotorCurrent(void)
 {
@@ -284,8 +297,8 @@ std::string CheckTemperatureSensor(void)
     }
 }
 
-string CheckButton(void) {
-    std::string outcome;
+string CheckSensor(void) {
+    std::string outcome = "no";
     if(CheckLightSensor().compare("no") != 0) {
         outcome = CheckLightSensor();
         return outcome;
@@ -294,36 +307,7 @@ string CheckButton(void) {
         outcome = CheckTemperatureSensor();
         return outcome;
     }
-    if(Wind.read() == 0) {
-        return "wind";
-    }
-    if(Humid.read() == 0) { 
-        return "humid";
-    }
-    if(Greed.read() == 0) {
-        return "greed"; 
-    }
-    if(Religion.read() == 0) { 
-        return "religion"
-    }
-    if(GunPowder.read() == 0) { 
-        return "gun";
-    }
-    if(Plague.read() == 0) { 
-        return "plague";
-    }
-    if(Renaissance.read() == 0) { 
-        return "renaissance";
-    }
-    if(Love.read() == 0) { 
-        return "love";
-    }
-    if(Aliens.read() == 0) { 
-        return "Aliens";
-    }
-    else {
-        return "no";
-    }
+    return outcome;
 }
 
 void Events(std::string place, std::string outcome) {
@@ -459,8 +443,12 @@ int main(void)
             place = "Modern";
         }
         // Check the analog inputs.
-        std::string outcome = CheckButton();
+	sting sensor = CheckSensor();
+	if(sensor.compare("no") != 0) {
+		outcome = sensor;
+	}
         Events(place, outcome);
+	outcome = "no";
         gameOver = endingsTracker();
         wait_us(1000000); // Wait 1 second before repeating the loop.
     }
