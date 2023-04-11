@@ -6,7 +6,6 @@
 #include "Modern.h"
 #include "Advanced.h"
 #include <string>
-#include "tsi_sensor.h"
 
 //NEED CORRECT PIN NUMBERS
 AnalogIn LightSensor(PTB0);
@@ -37,19 +36,19 @@ DigitalOut TemperatureColdLED(PTE21);
 DigitalOut PhotoHigh(PTE29);
 DigitalOut PhotoDark(PTE30);
 
-DigitalIn Wind(PTC9);
-DigitalIn Humid(PTC8);
-DigitalIn Greed(PTA5);
-DigitalIn Religion(PTA4);
-DigitalIn GunPowder(PTC11);
-DigitalIn Plague(PTC10);
-DigitalIn Renaissance(PTC6);
-DigitalIn Love(PTC5);
-DigitalIn Aliens(PTC4);
+InterruptIn Wind(PTC9);
+InterruptIn Humid(PTC8);
+InterruptIn Greed(PTA5);
+InterruptIn Religion(PTA4);
+InterruptIn GunPowder(PTC11);
+InterruptIn Plague(PTC10);
+InterruptIn Renaissance(PTC6);
+InterruptIn Love(PTC5);
+InterruptIn Aliens(PTC4);
 
-DigitalIn NomadSelect(PTC3);
-DigitalIn ModernSelect(PTD1);
-DigitalIn AdvancedSelect(PTD3);
+//InterruptIn NomadSelect(PTC3);
+//InterruptIn ModernSelect(PTD1);
+//InterruptIn AdvancedSelect(PTD3);
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
@@ -116,24 +115,25 @@ void WorldRefresher(void)
     modern = new Modern();
     advanced = new Advanced();
 }
-
-float getMotorCurrent(void)
-{
-
-    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
-    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
-    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
-
-    return MotorCurrent;
+string Winder(void) {
+}
+string Humider(void) {
+}
+string Greeder(void) {
+}
+string Religioner(void) {
+}
+string GunPowderer(void) {
+}
+string Plaguer(void) {
+}
+string Renaissancer(void) {
+}
+string Lover(void) {
+}
+string Aliener(void) {
 }
 
-// This function will check the Over Torque analog input.
-void CheckTorqueSensor(void)
-{
-     if(getMotorCurrent() >= MotorCurrentLimit) {
-        OutputMotor = 1;
-    }
-}
 // This function will be attached to the Universe Refresh button interrupt.
 void UniverseRestarter(void)
 {
@@ -181,6 +181,24 @@ void Volcanoy(void)
         }
        }
        wait_us(1000000);
+    }
+}
+
+float getMotorCurrent(void)
+{
+
+    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
+    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
+    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
+
+    return MotorCurrent;
+}
+
+// This function will check the Over Torque analog input.
+void CheckTorqueSensor(void)
+{
+     if(getMotorCurrent() >= MotorCurrentLimit) {
+        OutputMotor = 1;
     }
 }
 bool endingsTracker() {
@@ -288,7 +306,7 @@ string CheckButton(void) {
         return "greed"; 
     }
     if(Religion.read() == 0) { 
-        return "religion";
+        return "religion"
     }
     if(GunPowder.read() == 0) { 
         return "gun";
@@ -309,7 +327,20 @@ string CheckButton(void) {
         return "no";
     }
 }
-
+string CheckPlace(void) {
+    if(NomadSelect.read() == 0) {
+        return "Nomad";
+    }
+    if(ModernSelect.read() == 0) { 
+        return "Modern";
+    }
+    if(AdvancedSelect.read() == 0) {
+        return "Advanced"; 
+    }
+    else {
+        return "no";
+    }
+}
 void Events(std::string place, std::string outcome) {
     int people;
     if(place.compare("Nomad") == 0) {
@@ -418,22 +449,23 @@ int main(void)
     WorldRefresh.rise(&WorldRefresher);
     UniverseRestart.rise(&UniverseRestarter);
     Volcano.rise(&Volcanoy);
+//Buttons
+    Wind.rise(&Winder);
+    Humid.rise(&Humider);
+    Greed.rise(&Greeder);
+    Religion.rise(&Religioner);
+    GunPowder.rise(&GunPowderer);
+    Plague.rise(&Plaguer);
+    Renaissance.rise(&Renaissancer);
+    Love.rise(&Lover);
+    Aliens.rise(&Aliener);
     // Initialize LED outputs to OFF (LED logic is inverted)
     setRoomValues();
-    TSIAnalogSlider tsi(9, 10, 40);
 
     while(!gameOver) {
         // Check the analog inputs.
-        float holder = tsi.readPercentage();
-        string place = "no";
-        if(holder <= 0.30) {  
-            place = "Nomad";
-        } else if (holder >= 0.60){
-            place = "Advanced";
-        } else {
-            place = "Modern";
-        }
         std::string outcome = CheckButton();
+        std::string place = CheckPlace();
         Events(place, outcome);
         gameOver = endingsTracker();
         wait(1.0); // Wait 1 second before repeating the loop.
