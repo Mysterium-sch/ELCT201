@@ -465,7 +465,7 @@ int main(void)
         std::string outcome = CheckButton();
         Events(place, outcome);
         gameOver = endingsTracker();
-        wait(1.0); // Wait 1 second before repeating the loop.
+        wait_us(1000000); // Wait 1 second before repeating the loop.
     }
     std::cout << "You have completed your training. You are welcomed to Godhood."<< std::endl;
 }
