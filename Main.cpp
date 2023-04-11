@@ -90,7 +90,7 @@ float roomTemp;
 float roomLight;
 bool ender[10] = {false,false,false,false,false,false,false,false,false,false};
 bool gameOver = false;
-std::string outcome;
+string outcome;
 
 // This function will be attached to the World Refresh button interrupt.
 void WorldRefresher(void)
@@ -443,7 +443,7 @@ int main(void)
             place = "Modern";
         }
         // Check the analog inputs.
-	sting sensor = CheckSensor();
+	string sensor = CheckSensor();
 	if(sensor.compare("no") != 0) {
 		outcome = sensor;
 	}
