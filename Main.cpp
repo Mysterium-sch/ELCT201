@@ -6,6 +6,7 @@
 #include "Modern.h"
 #include "Advanced.h"
 #include <string>
+#include "tsi_sensor.h"
 
 //NEED CORRECT PIN NUMBERS
 AnalogIn LightSensor(PTB0);
@@ -327,20 +328,7 @@ string CheckButton(void) {
         return "no";
     }
 }
-string CheckPlace(void) {
-    if(NomadSelect.read() == 0) {
-        return "Nomad";
-    }
-    if(ModernSelect.read() == 0) { 
-        return "Modern";
-    }
-    if(AdvancedSelect.read() == 0) {
-        return "Advanced"; 
-    }
-    else {
-        return "no";
-    }
-}
+
 void Events(std::string place, std::string outcome) {
     int people;
     if(place.compare("Nomad") == 0) {
@@ -461,11 +449,20 @@ int main(void)
     Aliens.rise(&Aliener);
     // Initialize LED outputs to OFF (LED logic is inverted)
     setRoomValues();
+    TSIAnalogSlider tsi(9, 10, 40);
 
     while(!gameOver) {
+	    float holder = tsi.readPercentage();
+        string place = "no";
+        if(holder <= 0.30) {  
+            place = "Nomad";
+        } else if (holder >= 0.60){
+            place = "Advanced";
+        } else {
+            place = "Modern";
+        }
         // Check the analog inputs.
         std::string outcome = CheckButton();
-        std::string place = CheckPlace();
         Events(place, outcome);
         gameOver = endingsTracker();
         wait(1.0); // Wait 1 second before repeating the loop.
