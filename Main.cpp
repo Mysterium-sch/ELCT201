@@ -2,9 +2,7 @@
 #include "mbed.h"
 #include <iostream>
 #include "platform/mbed_thread.h"
-#include "Nomad.h"
-#include "Modern.h"
-#include "Advanced.h"
+#include "death.h"
 #include <string>
 #include "tsi_sensor.h"
 
@@ -81,9 +79,9 @@ float TemperatureColdLimit = 15.0; //Too cold level
 float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor torque deactivation
 
 //Classes
-Nomad *nomad = new Nomad();
-Modern *modern = new Modern();
-Advanced *advanced = new Advanced();
+Nomad *nomad = new Death("nomad");
+Modern *modern = new Death("modern");
+Advanced *advanced = new Death("advanced");
 
 //Global Variables
 float roomTemp;

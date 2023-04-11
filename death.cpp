@@ -17,7 +17,7 @@
     void Death::eventHandler(string value) {
         string ouput;
             if(value.compare("volcano")==0) {
-            ouput = "The volcano devastated the Death people and wiped out their civilization.\n";
+            ouput = "The volcano devastated The" + world + " people and wiped out their civilization.\n";
             people =0;
         }
             if(value.compare("love")==0) {
@@ -45,7 +45,7 @@
                 }
             }if(value.compare("greed")==0) {
                 greed = !greed;
-                ouput = "The Death civilization is immune to the powers that greed holds.\n";
+                ouput = "The" + world + " civilization is immune to the powers that greed holds.\n";
             }if(value.compare("humid")==0) {
                 humid = !humid;
                 if(humid)
@@ -133,7 +133,7 @@
             } if(value.compare("warAlien") == 0) {
                 if(gun && Aliens && greed) {
                     if(people != 00) {
-                    ouput = "This Death civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
+                    ouput = "This " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
                 }
                 }
             } if(value.compare("warGold") == 0) {
@@ -185,7 +185,7 @@
                 }
             } if (value.compare("hope")==0) {
                 if(religion && plague) {
-                    ouput = "The Death civilization does not belevie 'god' will cure their plague.\n";
+                    ouput = "The" + world + " civilization does not belevie 'god' will cure their plague.\n";
                 }
             } if(value.compare("AlienPlague")==0) {
                 if(Aliens && plague) {
@@ -211,46 +211,78 @@
     
         bool Death::endHandler(string value) {
             string output;
+            bool ending;
         if(value.compare("peace") == 0) {
             if(people == 3 && love && renaissance) {
-                ouput = "This Death civilization is in harmony and peace.\n";
-                return true;
+                ouput = "This "+ world +" civilization is in harmony and peace.\n";
+                ending = true;
             }
 
         }else if(value.compare("god")==0) {
-            ouput = "This Death civilization scoffs at the idea of god as they are beyond religion.\n";
-            return false;
+            if(world.compare("advanced")==0) {
+            ouput = "This " + world + " civilization scoffs at the idea of god as they are beyond religion.\n";
+            ending = true;
+            } else if (world.compare("nomad")==0){
+            output = "The nomadic people are so impressed by the aliens that they are now worshiped.\n";
+            ending = true;
+            } else {
+                ouput = "The trial that the aliens brough made the modern civilization believe even stronger in their god.\n";
+                ending = true;
+            }
 
         } else if(value.compare("christmas")==0) {
-            ouput = "This Death civilization scoffs at the idea of christmas as they are beyond religion.\n";
-            return false;
+            if(world.compare("advanced")==0) {
+            ouput = "This " + world + " civilization scoffs at the idea of christmas as they are beyond religion.\n";
+            ending = false;
+            } else {
+                output = "Its a beautiful snowy day and the " + world + " civilization is giving gifts to each other.\n";
+                ending = true;
+            }
 
         } else if(value.compare("cultural")==0) {
             if(religion && renaissance && Aliens) {
-            ouput = "The aliens taught the Death civilization to grow and accept old concepts. Culture is now being developed.\n";
-            return true;
+            if(world.compare("advanced")==0) {
+            ouput = "The aliens taught The" + world + " civilization to grow and accept old concepts. Culture is now being developed.\n";
+            ending = true;
+            } else if (world.compare("modern")==0) {
+                output = "The modern civilization has vast ties to their culture and refuses to change.\n";
+                ending = false;
+            } else {
+                ouput = "The nomadic civilization moves to often to develop their culture.\n";
+                ending = false;
+            }
                         }
 
         } else if(value.compare("nothing")==0) {
             if(people == 0 && Aliens) {
-                ouput = "The world may be vast, but there is no one here. The nomads are gone.\n";
-                return true;
+                ouput = "The world may be vast, but there is no one here. The "+ world +" people are gone.\n";
+                ending = true;
+            }
+        } else if(value.compare("before")==0 && world.compare("modern")==0) {
+            if(people == 2 && plague && humid && hot) {
+                cout << "Time to buy toilet paper and milk.\n";
+                ending = true;
             }
         } else if(value.compare("Greedy")==0) {
-             ouput = "This Death civilization scoffs at the idea of greed as they are beyond selfishness.\n";
-            return false;
+            if(world.compare("advanced")==0) {
+             ouput = "This " + world + " civilization scoffs at the idea of greed as they are beyond selfishness.\n";
+            ending = false;
+            } else {
+                ouput = "The "+ world +" civilization really likes their gold.\n";
+                ending = true;
+            }
 
         } else if(value.compare("warming")==0) {
             if(humid && wind && hot) {
-            ouput = "The world is slowing warming up. This may be a problem, but not the nomads problem.\n";
-            return true;
+            ouput = "The world is slowing warming up. This may be a problem, but not the " + world + "s problem.\n";
+            ending = true;
             }
         } else if(value.compare("gone")==0) {
             if(people == 0 && cold && dark) {
                 ouput = "The world may be vast, but there is no one here. The nomads are gone.\n";
-                return true;
+                ending = true;
             }
         }
         cout << output;
-        return false;
+        return ending;
     }
