@@ -168,7 +168,6 @@ void UniverseRestarter(void)
 void Volcanoy(void)
 {
 	srand(time(0));
-    while(true) {
        if((rand() % (1000 + 1)) == 0) {
         OutputMotor = 1;
         for(int i = 0; i<10; i++) {
@@ -181,9 +180,7 @@ void Volcanoy(void)
             }
         }
        }
-       wait_us(1000000);
-    }
-}
+      
 
 float getMotorCurrent(void)
 {
