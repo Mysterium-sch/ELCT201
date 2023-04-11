@@ -36,19 +36,19 @@ DigitalOut TemperatureColdLED(PTE21);
 DigitalOut PhotoHigh(PTE29);
 DigitalOut PhotoDark(PTE30);
 
-DigitalIn Wind();
-DigitalIn Humid();
-DigitalIn Greed();
-DigitalIn Religion();
-DigitalIn GunPowder();
-DigitalIn Plague();
-DigitalIn Renaissance();
-DigitalIn Love();
-DigitalIn Aliens();
+DigitalIn Wind(PTC9);
+DigitalIn Humid(PTC8);
+DigitalIn Greed(PTA5);
+DigitalIn Religion(PTA4);
+DigitalIn GunPowder(PTC11);
+DigitalIn Plague(PTC10);
+DigitalIn Renaissance(PTC6);
+DigitalIn Love(PTC5);
+DigitalIn Aliens(PTC4);
 
-DigitalIn NomadSelect();
-DigitalIn ModernSelect();
-DigitalIn AdvancedSelect();
+DigitalIn NomadSelect(PTC3);
+DigitalIn ModernSelect(PTD1);
+DigitalIn AdvancedSelect(PTD3);
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
