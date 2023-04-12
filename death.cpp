@@ -120,90 +120,124 @@
                     ouput = "The brightness is subsiding.\n";
                 }
             }
+            
             // Death events
-            if(value.compare("blizzard")==0) {
                 if(wind && cold) {
-                    ouput = "A blizzard has struck the civilization.\n";
+                    if(world.compare("nomad")==0) {
+                        output += "The nomads noticed the weather changing and moved to somewhere warmer.\n";
+                    } else {
+                    ouput += "A blizzard has struck the civilization.\n";
                     if(people != 0) {
                         people -= 1;
                     } else {
                         ouput = "but everyone is already gone...\n";
                     }
+                    }
                 }
-            } if(value.compare("warAlien") == 0) {
                 if(gun && Aliens && greed) {
-                    if(people != 00) {
+                    if(people != 0) {
+                    if(world.compare("advanced")== 0) {
                     ouput = "This " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
+                } else if (world.compare("nomad")==0) {
+                    output += "The civilization yearned for the alien's tech, which didn't work out for them.\n";
+                    people -= 1;
+                    if(people <= 0) {
+                        people = 0;
+                    }
+                } else {
+                    output += "There are no aliens to fight.\n";
                 }
                 }
-            } if(value.compare("warGold") == 0) {
+                }
                 if(gun && gold && greed) {
+                    if(world.compare("advanced") == 0) {
+                        output += "The advanced civilization does not understand the importance of gold.\n";
+                    } else {
                     if(people != 0) {
                         ouput = "The civilization has started a war over the gold!\n";
                         people -= 1;
                     }
                 }
-            } if(value.compare("heatStroke")==0) {
+                }
                 if(humid && hot) {
+                    if(world.compare("nomad")==0) {
+                        output =  "The nomads noticed the weather getting warmer and moved north.\n";
+                    } else {
                     ouput = "The civilization is unprepared for the heat.\n";
                     if(people != 0) {
                         people -= 1;
                     } else {
                         ouput = "but everyone is already gone...\n";
                     }
+                    }
                 }
-            } if(value.compare("warReligion")==0) {
                 if(gun && religion) {
+                    if(world.compare("advanced")==0) {
+                        output += "The advanced civilization has agreed religion is dumb.\n";
+                    }
                     if(people != 0) {
-                        ouput = "TThe civilization can't come to consenses on who's religion is right.\n";
+                        ouput += "The civilization can't come to consenses on who's religion is right.\n";
                         people -= 1;
                     }
                 }
-            } if(value.compare("plagueDeaths")==0) {
                 if(plague && cold) {
-                    ouput = "The sickness is worstening during these harsh winters.\n";
+                    if(world.compare("nomad")==0) {
+                        output += "The nomads move before the cold sets in so plague does not spread as fast.\n";
+                    } else {
+                    ouput += "The sickness is worstening during these harsh winters.\n";
                     if(people != 0) {
                         people -= 1;
                     } else {
                         ouput = "but everyone is already gone...\n";
                     }
+                    }
                 }
-            } if(value.compare("boon")==0) {
                 if(renaissance && love) {
-                    ouput = "A celebration of life is happening as people immegrate to this civilization\n";
+                    ouput += "A celebration of life is happening as people immegrate to this civilization\n";
                     if(people != 3 || people != 2) {
                         people += 2;
                     }
                 }
-            } if(value.compare("abducted")==0) {
                 if(Aliens && dark) {
-                    ouput = "Someone has gone missing, the Aliens claim the didn't do it.\n";
+                    if(world.compare("modern")==0) {
+                        output += "Someone has gone missing, the Aliens claim the didn't do it.\n";
+                    } else {
+                    ouput += "Someone has gone missing, the Aliens claim the didn't do it.\n";
+                    } 
                     people -= 1;
                     if (people <= 0) {
                         people =0;
                     }
                 }
-            } if (value.compare("hope")==0) {
                 if(religion && plague) {
-                    ouput = "The" + world + " civilization does not belevie 'god' will cure their plague.\n";
+                    if(world.compare("advanced")==0) {
+                    ouput += "The" + world + " civilization does not belevie 'god' will cure their plague.\n";
+                } else {
+                     output += "God will cure this plague.\n";
+                    people -= 1;
+                    if (people <= 0) {
+                        people = 0;
+                    }
                 }
-            } if(value.compare("AlienPlague")==0) {
+                }
                 if(Aliens && plague) {
-                    ouput = "Everyone started getting weird bumps after the aliens arrived...\n";
+                    if(world.compare("modern")==0) {
+                        output += "There are no aliens here.\n";
+                    } else {
+                    ouput += "Everyone started getting weird bumps after the aliens arrived...\n";
                     people -= 2;
                     if(people < 0) {
                         people = 0;
                     }
                 }
-            } if(value.compare("GunLove")==0) {
+                }
                 if(gun && love) {
-                ouput = "People sure love their guns.\n";
+                ouput += "People sure love their guns.\n";
                 people -= 1;
                 if(people < 0) {
                     people =0 ;
                 }
                 }
-            }
 
         cout << ouput;
     }
