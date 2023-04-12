@@ -10,7 +10,6 @@
 AnalogIn LightSensor(PTB0);
 AnalogIn TemperatureSensor(PTB1);
 AnalogIn TorqueSensor(PTB2);
-InterruptIn UniverseRestart(PTD4);
 InterruptIn WorldRefresh(PTA12);
 InterruptIn Volcano(PTA4);
 
@@ -36,18 +35,11 @@ DigitalOut PhotoHigh(PTE29);
 DigitalOut PhotoDark(PTE30);
 
 InterruptIn Wind(PTC9);
-InterruptIn Humid(PTC8);
 InterruptIn Greed(PTA5);
 InterruptIn Religion(PTA4);
-InterruptIn GunPowder(PTC11);
 InterruptIn Plague(PTC10);
-InterruptIn Renaissance(PTC6);
 InterruptIn Love(PTC5);
 InterruptIn Aliens(PTC4);
-
-//InterruptIn NomadSelect(PTC3);
-//InterruptIn ModernSelect(PTD1);
-//InterruptIn AdvancedSelect(PTD3);
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
@@ -86,7 +78,7 @@ Death *advanced = new Death("advanced");
 //Global Variables
 float roomTemp;
 float roomLight;
-bool ender[10] = {false,false,false,false,false,false,false,false,false,false};
+bool ender[6] = {false,false,false,false,false, false};
 bool gameOver = false;
 string outcome;
 
@@ -118,23 +110,15 @@ advanced = new Death("advanced");
 void Winder(void) {
 	outcome = "wind";
 }
-void Humider(void) {
-	outcome = "humid";
-}
+
 void Greeder(void) {
 	outcome = "greed";
 }
 void Religioner(void) {
 	outcome = "religion";
 }
-void GunPowderer(void) {
-	outcome = "gun";
-}
 void Plaguer(void) {
 	outcome = "plague";
-}
-void Renaissancer(void) {
-	outcome = "renaissance";
 }
 void Lover(void) {
 	outcome = "love";
@@ -143,36 +127,6 @@ void Aliener(void) {
 	outcome = "alien";
 }
 
-// This function will be attached to the Universe Refresh button interrupt.
-void UniverseRestarter(void)
-{
-    cout << "Clean slate: you can now start the training simulation over" << endl;
-    delete nomad;
-    delete modern;
-    delete advanced;
-    //refresh lights
-    LED_1 = 0;
-    LED_2 = 0;
-    LED_3 = 0;
-    LED_4 = 0;
-    LED_5 = 0;
-    LED_6 = 0;
-    LED_7 = 0;
-    LED_8 = 0;
-    LED_9 = 0;
-    LED_N = 1;
-    LED_M = 1;
-    LED_A = 1;
-    //New Classes
-    nomad = new Death("nomad");
-modern = new Death("modern");
-advanced = new Death("advanced");
-    //Reset Endings
-    for(int i = 0; i<10; i++) {
-        ender[i] = false;
-    }
-    bool gameOver = false;
-}
 float getMotorCurrent(void)
 {
 
@@ -209,8 +163,8 @@ void Volcanoy(void)
 
 bool endingsTracker() {
 
-    string endings[10] = {"peace", "god", "christmas", "cultural","nothing", "greedy", "before", "warming", "gone"};
-    for(int i = 0; i<9;i++) {
+    string endings[6] = {"christmas", "cultural","nothing", "warming", "gone", "beachday"};
+    for(int i = 0; i<4;i++) {
         if(nomad->endHandler(endings[i])) {
             ender[i] = true;
             i = 10;
@@ -225,13 +179,18 @@ bool endingsTracker() {
         }
         //gone
         else if(nomad->endHandler("gone") && modern->endHandler("gone") && advanced->endHandler("gone")) {
-            ender[9] = true;
+            ender[4] = true;
+            i = 10;
+        }
+        //gone
+        else if(nomad->endHandler("beachday") && modern->endHandler("beachday") && advanced->endHandler("beachday")) {
+            ender[5] = true;
             i = 10;
         }
     }
     //check if all true
     bool done = true;
-    for(int i = 0; i<10;i++) {
+    for(int i = 0; i<6;i++) {
         if(!ender[i]) {
             return false;
         }
@@ -262,9 +221,7 @@ std::string CheckLightSensor(void)
     else if  (light >= LightDarkResistanceLimit) {
         return "dark";
     }
-    else {
-        return "no";
-    }
+    return "no";
 }
 
 // This function converts the voltage value from the thermistor input to an approximate temperature
@@ -289,9 +246,7 @@ std::string CheckTemperatureSensor(void)
     else if (temp <= TemperatureColdLimit) {
         return "cold";
     }
-    else {
-        return "no";
-    }
+    return "no";
 }
 
 string CheckSensor(void) {
@@ -413,16 +368,12 @@ int main(void)
     std::cout << "Welcome, please see the training box for further instructions.\n";
     // Attach the functions to the hardware interrupt pins.
     WorldRefresh.rise(&WorldRefresher);
-    UniverseRestart.rise(&UniverseRestarter);
     Volcano.rise(&Volcanoy);
 //Buttons
     Wind.rise(&Winder);
-    Humid.rise(&Humider);
     Greed.rise(&Greeder);
     Religion.rise(&Religioner);
-    GunPowder.rise(&GunPowderer);
     Plague.rise(&Plaguer);
-    Renaissance.rise(&Renaissancer);
     Love.rise(&Lover);
     Aliens.rise(&Aliener);
     // Initialize LED outputs to OFF (LED logic is inverted)
