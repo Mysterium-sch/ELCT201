@@ -19,7 +19,7 @@ class Death {
 
     protected:
     int people;
-    bool love, wind, greed, humid, gold, religion, gun, plague, renaissance, Aliens = false;
+    bool love, wind, greed, religion, gun, plague, Aliens = false;
     bool cold, dark, hot, light = false;
     string world;
 };
