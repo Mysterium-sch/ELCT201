@@ -111,9 +111,9 @@ void WorldRefresher(void)
     LED_M = 1;
     LED_A = 1;
     //New Classes
-    nomad = new Nomad();
-    modern = new Modern();
-    advanced = new Advanced();
+    nomad = new Death("nomad");
+modern = new Death("modern");
+advanced = new Death("advanced");
 }
 void Winder(void) {
 	outcome = "wind";
@@ -164,9 +164,9 @@ void UniverseRestarter(void)
     LED_M = 1;
     LED_A = 1;
     //New Classes
-    nomad = new Nomad();
-    modern = new Modern();
-    advanced = new Advanced();
+    nomad = new Death("nomad");
+modern = new Death("modern");
+advanced = new Death("advanced");
     //Reset Endings
     for(int i = 0; i<10; i++) {
         ender[i] = false;
@@ -175,8 +175,6 @@ void UniverseRestarter(void)
 }
 void Volcanoy(void)
 {
-	srand(time(0));
-    while(true) {
        if((rand() % (1000 + 1)) == 0) {
         OutputMotor = 1;
         for(int i = 0; i<10; i++) {
@@ -188,7 +186,6 @@ void Volcanoy(void)
                 wait_us(1000000);
             }
         }
-       }
        wait_us(1000000);
     }
 }
@@ -258,10 +255,11 @@ float getPhotoResistance(void)
 // This function will check the LDR analog input.
 std::string CheckLightSensor(void)
 {
-    if(getPhotoResistance() <= LightBrightResistanceLimit) {
+	float light = getPhotoResistance();
+    if(light <= LightBrightResistanceLimit) {
         return "bright";
     }
-    else if  (getPhotoResistance() >= LightDarkResistanceLimit) {
+    else if  (light >= LightDarkResistanceLimit) {
         return "dark";
     }
     else {
@@ -284,10 +282,11 @@ float getThermistorTemperature(void)
 //This function will check for a temperature triggered deactivation of the motor
 std::string CheckTemperatureSensor(void)
 {
-    if(getThermistorTemperature() >= TemperatureHotLimit) {
+	float temp = getThermistorTemperature();
+    if( temp >= TemperatureHotLimit) {
          return "hot";
     }
-    else if (getThermistorTemperature() <= TemperatureColdLimit) {
+    else if (temp <= TemperatureColdLimit) {
         return "cold";
     }
     else {
@@ -429,7 +428,7 @@ int main(void)
     // Initialize LED outputs to OFF (LED logic is inverted)
     setRoomValues();
     TSIAnalogSlider tsi(9, 10, 40);
-
+    srand(time(0));
     while(!gameOver) {
 	    float holder = tsi.readPercentage();
         string place = "no";
