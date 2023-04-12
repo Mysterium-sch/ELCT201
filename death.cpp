@@ -137,7 +137,7 @@
                 if(gun && Aliens && greed) {
                     if(people != 0) {
                     if(world.compare("advanced")== 0) {
-                    ouput = "This " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
+                    ouput += "This " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
                 } else if (world.compare("nomad")==0) {
                     output += "The civilization yearned for the alien's tech, which didn't work out for them.\n";
                     people -= 1;
@@ -154,20 +154,20 @@
                         output += "The advanced civilization does not understand the importance of gold.\n";
                     } else {
                     if(people != 0) {
-                        ouput = "The civilization has started a war over the gold!\n";
+                        ouput += "The civilization has started a war over the gold!\n";
                         people -= 1;
                     }
                 }
                 }
                 if(humid && hot) {
                     if(world.compare("nomad")==0) {
-                        output =  "The nomads noticed the weather getting warmer and moved north.\n";
+                        output +=  "The nomads noticed the weather getting warmer and moved north.\n";
                     } else {
-                    ouput = "The civilization is unprepared for the heat.\n";
+                    ouput += "The civilization is unprepared for the heat.\n";
                     if(people != 0) {
                         people -= 1;
                     } else {
-                        ouput = "but everyone is already gone...\n";
+                        ouput += "but everyone is already gone...\n";
                     }
                     }
                 }
@@ -188,7 +188,7 @@
                     if(people != 0) {
                         people -= 1;
                     } else {
-                        ouput = "but everyone is already gone...\n";
+                        ouput += "but everyone is already gone...\n";
                     }
                     }
                 }
