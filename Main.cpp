@@ -79,9 +79,9 @@ float TemperatureColdLimit = 15.0; //Too cold level
 float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor torque deactivation
 
 //Classes
-Nomad *nomad = new Death("nomad");
-Modern *modern = new Death("modern");
-Advanced *advanced = new Death("advanced");
+Death *nomad = new Death("nomad");
+Death *modern = new Death("modern");
+Death *advanced = new Death("advanced");
 
 //Global Variables
 float roomTemp;
@@ -173,23 +173,6 @@ advanced = new Death("advanced");
     }
     bool gameOver = false;
 }
-void Volcanoy(void)
-{
-       if((rand() % (1000 + 1)) == 0) {
-        OutputMotor = 1;
-        for(int i = 0; i<10; i++) {
-            CheckTorqueSensor();
-            if(OutputMotor == 1) {
-                i=11;
-                OutputMotor = 0;
-            } else {
-                wait_us(1000000);
-            }
-        }
-       wait_us(1000000);
-    }
-}
-
 float getMotorCurrent(void)
 {
 
@@ -207,6 +190,23 @@ void CheckTorqueSensor(void)
         OutputMotor = 1;
     }
 }
+void Volcanoy(void)
+{
+       if((rand() % (1000 + 1)) == 0) {
+        OutputMotor = 1;
+        for(int i = 0; i<10; i++) {
+            CheckTorqueSensor();
+            if(OutputMotor == 1) {
+                i=11;
+                OutputMotor = 0;
+            } else {
+                wait_us(1000000);
+            }
+        }
+       wait_us(1000000);
+    }
+}
+
 bool endingsTracker() {
 
     string endings[10] = {"peace", "god", "christmas", "cultural","nothing", "greedy", "before", "warming", "gone"};
