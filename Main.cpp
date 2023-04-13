@@ -7,39 +7,40 @@
 #include "tsi_sensor.h"
 
 //NEED CORRECT PIN NUMBERS
-AnalogIn LightSensor(PTB0);
-AnalogIn TemperatureSensor(PTB1);
-AnalogIn TorqueSensor(PTB2);
-InterruptIn WorldRefresh(PTA12);
-InterruptIn Volcano(PTA4);
+AnalogIn LightSensor(PTE20);
+AnalogIn TemperatureSensor(PTE21);
+// AnalogIn TorqueSensor(PTD4);
+InterruptIn WorldRefresh(PTD1);
+// InterruptIn Volcano(PTD4);
 
-DigitalOut OutputMotor(PTC2);
+// DigitalOut OutputMotor(PTC9);
 
-DigitalOut LED_1(PTB11);
-DigitalOut LED_2(PTE2);
-DigitalOut LED_3(PTE3);
-DigitalOut LED_4(PTE4);
-DigitalOut LED_5(PTE5);
-DigitalOut LED_6(PTC9);
-DigitalOut LED_7(PTC8);
-DigitalOut LED_8(PTA5);
-DigitalOut LED_9(PTA4);
+DigitalOut LED_1(PTC7);
+DigitalOut LED_2(PTC0);
+DigitalOut LED_3(PTC3);
+DigitalOut LED_4(PTE29);
+DigitalOut LED_5(PTE30);
+DigitalOut LED_6(PTB0);
+DigitalOut LED_7(PTB2);
+DigitalOut LED_8(PTB3);
+DigitalOut LED_9(PTC2); 
 
-DigitalOut LED_N(PTB8);
-DigitalOut LED_M(PTB9);
-DigitalOut LED_A(PTB10);
+DigitalOut LED_N(PTC4);
+DigitalOut LED_M(PTB1);
+DigitalOut LED_A(PTE3);
 
-DigitalOut TemperatureHotLED(PTE20);
-DigitalOut TemperatureColdLED(PTE21);
-DigitalOut PhotoHigh(PTE29);
-DigitalOut PhotoDark(PTE30);
+DigitalOut TemperatureHotLED(PTB8);
+DigitalOut TemperatureColdLED(PTB9);
+DigitalOut PhotoHigh(PTE5);
+DigitalOut PhotoDark(PTE4);
 
-InterruptIn Wind(PTC9);
-InterruptIn Greed(PTA5);
-InterruptIn Religion(PTA4);
-InterruptIn Plague(PTC10);
-InterruptIn Love(PTC5);
-InterruptIn Aliens(PTC4);
+InterruptIn Wind(PTD3);
+InterruptIn Greed(PTD2);
+InterruptIn Religion(PTD0);
+InterruptIn Plague(PTD5);
+InterruptIn Love(PTA13);
+InterruptIn Aliens(PTA5);
+InterruptIn Gun(PTA12);
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
@@ -85,27 +86,27 @@ string outcome;
 // This function will be attached to the World Refresh button interrupt.
 void WorldRefresher(void)
 {
-    cout << "On to the next world!" << endl;
-    delete nomad;
-    delete modern;
-    delete advanced;
+    //cout << "On to the next world!" << endl;
+    // delete nomad;
+    // delete modern;
+    // delete advanced;
     //refresh lights
-    LED_1 = 0;
-    LED_2 = 0;
-    LED_3 = 0;
-    LED_4 = 0;
-    LED_5 = 0;
-    LED_6 = 0;
-    LED_7 = 0;
-    LED_8 = 0;
-    LED_9 = 0;
-    LED_N = 1;
-    LED_M = 1;
-    LED_A = 1;
+    LED_1 = 1;
+    LED_2 = 1;
+    LED_3 = 1;
+    LED_4 = 1;
+    LED_5 = 1;
+    LED_6 = 1;
+    LED_7 = 1;
+    LED_8 = 1;
+    LED_9 = 1;
+    LED_N = 0;
+    LED_M = 0;
+    LED_A = 0;
     //New Classes
-    nomad = new Death("nomad");
-modern = new Death("modern");
-advanced = new Death("advanced");
+//     nomad = new Death("nomad");
+// modern = new Death("modern");
+// advanced = new Death("advanced");
 }
 void Winder(void) {
 	outcome = "wind";
@@ -126,40 +127,43 @@ void Lover(void) {
 void Aliener(void) {
 	outcome = "alien";
 }
-
-float getMotorCurrent(void)
-{
-
-    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
-    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
-    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
-
-    return MotorCurrent;
+void Gunner(void) {
+	outcome = "gun";
 }
 
-// This function will check the Over Torque analog input.
-void CheckTorqueSensor(void)
-{
-     if(getMotorCurrent() >= MotorCurrentLimit) {
-        OutputMotor = 1;
-    }
-}
-void Volcanoy(void)
-{
-       if((rand() % (1000 + 1)) == 0) {
-        OutputMotor = 1;
-        for(int i = 0; i<10; i++) {
-            CheckTorqueSensor();
-            if(OutputMotor == 1) {
-                i=11;
-                OutputMotor = 0;
-            } else {
-                wait_us(1000000);
-            }
-        }
-       wait_us(1000000);
-    }
-}
+// float getMotorCurrent(void)
+// {
+
+//     MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
+//     MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
+//     MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
+
+//     return MotorCurrent;
+// }
+
+// // This function will check the Over Torque analog input.
+// void CheckTorqueSensor(void)
+// {
+//      if(getMotorCurrent() >= MotorCurrentLimit) {
+//         OutputMotor = 1;
+//     }
+// }
+// void Volcanoy(void)
+// {
+//        if((rand() % (1000 + 1)) == 0) {
+//         OutputMotor = 1;
+//         for(int i = 0; i<10; i++) {
+//             CheckTorqueSensor();
+//             if(OutputMotor == 1) {
+//                 i=11;
+//                 OutputMotor = 0;
+//             } else {
+//                 wait_us(1000000);
+//             }
+//         }
+//        wait_us(1000000);
+//     }
+// }
 
 bool endingsTracker() {
 
@@ -211,17 +215,24 @@ float getPhotoResistance(void)
     return LdrResistance;
 }
 
-// This function will check the LDR analog input.
+//This function will check the LDR analog input.
 std::string CheckLightSensor(void)
 {
 	float light = getPhotoResistance();
-    if(light <= LightBrightResistanceLimit) {
+    if(light < LightBrightResistanceLimit) {
+        PhotoHigh = 1;
+        PhotoDark = 0;
         return "bright";
     }
-    else if  (light >= LightDarkResistanceLimit) {
+    else if  (light > LightDarkResistanceLimit) {
+        PhotoHigh = 0;
+        PhotoDark = 1;
         return "dark";
-    }
+    } else {
+    PhotoHigh = 0;
+    PhotoDark = 0;
     return "no";
+    }
 }
 
 // This function converts the voltage value from the thermistor input to an approximate temperature
@@ -241,9 +252,13 @@ std::string CheckTemperatureSensor(void)
 {
 	float temp = getThermistorTemperature();
     if( temp >= TemperatureHotLimit) {
+        TemperatureColdLED = 0;
+        TemperatureHotLED = 1;
          return "hot";
     }
     else if (temp <= TemperatureColdLimit) {
+        TemperatureHotLED = 0;
+        TemperatureColdLED = 1;
         return "cold";
     }
     return "no";
@@ -265,9 +280,9 @@ string CheckSensor(void) {
 void Events(std::string place, std::string outcome) {
     int people;
     if(place.compare("Nomad") == 0) {
-            LED_N = 0;
-            LED_M = 1;
-            LED_A = 1;
+            LED_N = 1;
+            LED_M = 0;
+            LED_A = 0;
             if(outcome != "no") {
                 nomad->eventHandler(outcome);
                 people = nomad->getPeople();
@@ -294,9 +309,9 @@ void Events(std::string place, std::string outcome) {
             }
         }
         if(place.compare("Modern") == 0) {
-            LED_M = 0;
-            LED_N = 1;
-            LED_A = 1;
+            LED_M = 1;
+            LED_N = 0;
+            LED_A = 0;
             if(outcome != "no") {
                 modern->eventHandler(outcome);
                 people = modern->getPeople();
@@ -323,9 +338,9 @@ void Events(std::string place, std::string outcome) {
             }
         }
         if(place.compare("Advanced") == 0) {
-            LED_A = 0;
-            LED_M = 1;
-            LED_N = 1;
+            LED_A = 1;
+            LED_M = 0;
+            LED_N = 0;
             if(outcome != "no") {
                 advanced->eventHandler(outcome);
                 people = advanced->getPeople();
@@ -355,11 +370,12 @@ void Events(std::string place, std::string outcome) {
 void setRoomValues(void) {
 	roomTemp = getThermistorTemperature();
 	roomLight = getPhotoResistance();
+    cout << "temp" << roomTemp <<  " " << " light " << roomLight << "\n";
 		
-	LightBrightResistanceLimit = roomLight - 1000;
-	LightDarkResistanceLimit = roomLight+1000;
-	TemperatureHotLimit = roomTemp+10;
-	TemperatureColdLimit = roomTemp-10;
+	LightBrightResistanceLimit = roomLight - 5000;
+	LightDarkResistanceLimit = roomLight + 5000;
+	TemperatureHotLimit = roomTemp + 3;
+	TemperatureColdLimit = roomTemp - 3;
 }
 
 // Standard entry point in C++.
@@ -368,29 +384,43 @@ int main(void)
     std::cout << "Welcome, please see the training box for further instructions.\n";
     // Attach the functions to the hardware interrupt pins.
     WorldRefresh.rise(&WorldRefresher);
-    Volcano.rise(&Volcanoy);
-//Buttons
+    // Volcano.rise(&Volcanoy);
+// //Buttons
     Wind.rise(&Winder);
     Greed.rise(&Greeder);
     Religion.rise(&Religioner);
     Plague.rise(&Plaguer);
     Love.rise(&Lover);
     Aliens.rise(&Aliener);
-    // Initialize LED outputs to OFF (LED logic is inverted)
+    Gun.rise(&Gunner);
+
+    LED_1 = 1;
+    LED_2 = 1;
+    LED_3 = 1;
+    LED_4 = 1;
+    LED_5 = 1;
+    LED_6 = 1;
+    LED_7 = 1;
+    LED_8 = 1;
+    LED_9 = 1;
+//     // Initialize LED outputs to OFF (LED logic is inverted)
     setRoomValues();
     TSIAnalogSlider tsi(9, 10, 40);
     srand(time(0));
+    outcome = "no";
+    string place = "no";
     while(!gameOver) {
 	    float holder = tsi.readPercentage();
-        string place = "no";
-        if(holder <= 0.30) {  
-            place = "Nomad";
-        } else if (holder >= 0.60){
-            place = "Advanced";
-        } else {
-            place = "Modern";
-        }
-        // Check the analog inputs.
+        if(holder != 0 ) {
+            if(holder <= 0.30) {  
+                place = "Nomad";
+            } else if (holder >= 0.60){
+                place = "Advanced";
+            } else if ((holder >0.30) || (holder <0.60)) {
+                place = "Modern";
+            }
+        }       
+         // Check the analog inputs.
 	string sensor = CheckSensor();
 	if(sensor.compare("no") != 0) {
 		outcome = sensor;
@@ -398,6 +428,8 @@ int main(void)
         Events(place, outcome);
 	outcome = "no";
         gameOver = endingsTracker();
+    CheckTemperatureSensor();
+    CheckLightSensor();
         wait_us(1000000); // Wait 1 second before repeating the loop.
     }
     std::cout << "You have completed your training. You are welcomed to Godhood."<< std::endl;
