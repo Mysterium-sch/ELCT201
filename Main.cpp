@@ -9,11 +9,11 @@
 //NEED CORRECT PIN NUMBERS
 AnalogIn LightSensor(PTE20);
 AnalogIn TemperatureSensor(PTE21);
-// AnalogIn TorqueSensor(PTD4);
+AnalogIn TorqueSensor(PTD4);
 InterruptIn WorldRefresh(PTD1);
 // InterruptIn Volcano(PTD4);
 
-// DigitalOut OutputMotor(PTC9);
+DigitalOut OutputMotor(PTC9);
 
 DigitalOut LED_1(PTC7);
 DigitalOut LED_2(PTC0);
@@ -81,33 +81,29 @@ float roomTemp;
 float roomLight;
 bool ender[6] = {false,false,false,false,false, false};
 bool gameOver = false;
+bool restart = false;
 string outcome;
+string curPlace;
 
 // This function will be attached to the World Refresh button interrupt.
 void WorldRefresher(void)
 {
-    //cout << "On to the next world!" << endl;
-    // delete nomad;
-    // delete modern;
-    // delete advanced;
-    //refresh lights
-    LED_1 = 1;
-    LED_2 = 1;
-    LED_3 = 1;
-    LED_4 = 1;
-    LED_5 = 1;
-    LED_6 = 1;
-    LED_7 = 1;
-    LED_8 = 1;
-    LED_9 = 1;
-    LED_N = 0;
-    LED_M = 0;
-    LED_A = 0;
-    //New Classes
-//     nomad = new Death("nomad");
-// modern = new Death("modern");
-// advanced = new Death("advanced");
+    restart = true;
 }
+
+void eventhandler(std::string event) {
+    if(event.compare("no")!=0) {
+    if(curPlace.compare("Advanced") == 0) {
+        advanced->eventHandler(event);
+    } else if(curPlace.compare("Modern") == 0) {
+        nomad->eventHandler(event);
+    } else if (curPlace.compare("Nomad") == 0) {
+        modern->eventHandler(event);
+    }
+    outcome = "no";
+    }
+}
+
 void Winder(void) {
 	outcome = "wind";
 }
@@ -131,39 +127,44 @@ void Gunner(void) {
 	outcome = "gun";
 }
 
-// float getMotorCurrent(void)
-// {
+float getMotorCurrent(void)
+{
 
-//     MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
-//     MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
-//     MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
+    MotorCurrentDigiValue = TorqueSensor.read(); //read the Torque A/D value
+    MotorCurrentVoltValue = Vsupply*MotorCurrentDigiValue; //convert to voltage
+    MotorCurrent = MotorCurrentVoltValue/MotorSeriesResistance; 
 
-//     return MotorCurrent;
-// }
+    return MotorCurrent;
+}
 
-// // This function will check the Over Torque analog input.
-// void CheckTorqueSensor(void)
-// {
-//      if(getMotorCurrent() >= MotorCurrentLimit) {
-//         OutputMotor = 1;
-//     }
-// }
-// void Volcanoy(void)
-// {
-//        if((rand() % (1000 + 1)) == 0) {
-//         OutputMotor = 1;
-//         for(int i = 0; i<10; i++) {
-//             CheckTorqueSensor();
-//             if(OutputMotor == 1) {
-//                 i=11;
-//                 OutputMotor = 0;
-//             } else {
-//                 wait_us(1000000);
-//             }
-//         }
-//        wait_us(1000000);
-//     }
-// }
+// This function will check the Over Torque analog input.
+bool CheckTorqueSensor(void)
+{
+     if(getMotorCurrent() >= MotorCurrentLimit) {
+        return true;
+    }
+    return false;
+}
+void Volcanoy(void)
+{
+       if((rand() % (10 + 1)) == 1) {
+        OutputMotor = 1;
+        cout << "A volcan is starting to emerge in " << curPlace << " if it is not stopped, everyone will die.\n";
+        for(int i = 0; i<10; i++) {
+            if(CheckTorqueSensor()) {
+                i=11;
+                OutputMotor = 0;
+            } else {
+                wait_us(1000000);
+            }
+        }
+        if(OutputMotor==1) {
+            eventhandler("volcano");
+            OutputMotor=0;
+        }
+       wait_us(1000000);
+    }
+}
 
 bool endingsTracker() {
 
@@ -222,7 +223,7 @@ std::string CheckLightSensor(void)
     if(light < LightBrightResistanceLimit) {
         PhotoHigh = 1;
         PhotoDark = 0;
-        return "bright";
+        return "light";
     }
     else if  (light > LightDarkResistanceLimit) {
         PhotoHigh = 0;
@@ -231,7 +232,7 @@ std::string CheckLightSensor(void)
     } else {
     PhotoHigh = 0;
     PhotoDark = 0;
-    return "no";
+    return "neither1";
     }
 }
 
@@ -261,127 +262,121 @@ std::string CheckTemperatureSensor(void)
         TemperatureColdLED = 1;
         return "cold";
     }
-    return "no";
+    return "neither2";
 }
 
 string CheckSensor(void) {
     std::string outcome = "no";
-    if(CheckLightSensor().compare("no") != 0) {
-        outcome = CheckLightSensor();
+    string checklight = CheckLightSensor();
+    if(checklight.compare("no") != 0) {
+        outcome = checklight;
         return outcome;
     }
-    if(CheckTemperatureSensor().compare("no") != 0) {
-        outcome = CheckTemperatureSensor();
+    string checktemp = CheckTemperatureSensor();
+    if(checktemp.compare("no") != 0) {
+        outcome = checktemp;
         return outcome;
     }
     return outcome;
 }
 
-void Events(std::string place, std::string outcome) {
+void lightsUpdater(std::string place) {
     int people;
-    if(place.compare("Nomad") == 0) {
+    if(place.compare("Modern") == 0) {
             LED_N = 1;
             LED_M = 0;
             LED_A = 0;
-            if(outcome != "no") {
-                nomad->eventHandler(outcome);
-                people = nomad->getPeople();
-                if(people == 0) {
+        }
+    if(place.compare("Nomad") == 0) {
+            LED_M = 1;
+            LED_N = 0;
+            LED_A = 0;
+        }
+    if(place.compare("Advanced") == 0) {
+            LED_M = 0;
+            LED_N = 0;
+            LED_A = 1;
+        }
+        people = nomad->getPeople();
+                if(people == 3) {
                     LED_1 = 1;
                     LED_2 = 1;
                     LED_3 = 1;
                 }
-                if(people == 1) {
+                if(people == 2) {
                     LED_1 = 0;
                     LED_2 = 1;
                     LED_3 = 1;
                 }
-                if(people == 2) {
+                if(people == 1) {
                     LED_1 = 0;
                     LED_2 = 0;
                     LED_3 = 1;
                 }
-                if(people == 3) {
+                if(people == 0) {
                     LED_1 = 0;
                     LED_2 = 0;
                     LED_3 = 0;
                 }
-            }
-        }
-        if(place.compare("Modern") == 0) {
-            LED_M = 1;
-            LED_N = 0;
-            LED_A = 0;
-            if(outcome != "no") {
-                modern->eventHandler(outcome);
                 people = modern->getPeople();
-                if(people == 0) {
+                if(people == 3) {
                     LED_4 = 1;
                     LED_5 = 1;
                     LED_6 = 1;
                 }
-                if(people == 1) {
+                if(people == 2) {
                     LED_4 = 0;
                     LED_5 = 1;
                     LED_6 = 1;
                 }
-                if(people == 2) {
+                if(people == 1) {
                     LED_4 = 0;
                     LED_5 = 0;
                     LED_6 = 1;
                 }
-                if(people == 3) {
+                if(people == 0) {
                     LED_4 = 0;
                     LED_5 = 0;
                     LED_6 = 0;
-                }
             }
-        }
-        if(place.compare("Advanced") == 0) {
-            LED_A = 1;
-            LED_M = 0;
-            LED_N = 0;
-            if(outcome != "no") {
-                advanced->eventHandler(outcome);
                 people = advanced->getPeople();
-                if(people == 0) {
+                if(people == 3) {
                     LED_7 = 1;
+                    LED_8 = 1;
+                    LED_9 = 1;
+                }
+                if(people == 2) {
+                    LED_7 = 0;
                     LED_8 = 1;
                     LED_9 = 1;
                 }
                 if(people == 1) {
                     LED_7 = 0;
-                    LED_8 = 1;
-                    LED_9 = 1;
-                }
-                if(people == 2) {
-                    LED_7 = 0;
                     LED_8 = 0;
                     LED_9 = 1;
                 }
-                if(people == 3) {
+                if(people == 0) {
                     LED_7 = 0;
                     LED_8 = 0;
                     LED_9 = 0;
                 }
-            }
-        }
 }
+
 void setRoomValues(void) {
 	roomTemp = getThermistorTemperature();
 	roomLight = getPhotoResistance();
-    cout << "temp" << roomTemp <<  " " << " light " << roomLight << "\n";
+    cout << "\n\rtemp" << roomTemp <<  " " << " light " << roomLight << "\n";
 		
 	LightBrightResistanceLimit = roomLight - 5000;
 	LightDarkResistanceLimit = roomLight + 5000;
-	TemperatureHotLimit = roomTemp + 3;
-	TemperatureColdLimit = roomTemp - 3;
+	TemperatureHotLimit = roomTemp + 5;
+	TemperatureColdLimit = roomTemp - 5;
 }
 
 // Standard entry point in C++.
 int main(void)
 {
-    std::cout << "Welcome, please see the training box for further instructions.\n";
+    std::cout << "\n\rWelcome, please see the training box for further instructions.\n";
     // Attach the functions to the hardware interrupt pins.
     WorldRefresh.rise(&WorldRefresher);
     // Volcano.rise(&Volcanoy);
@@ -407,31 +402,53 @@ int main(void)
     setRoomValues();
     TSIAnalogSlider tsi(9, 10, 40);
     srand(time(0));
-    outcome = "no";
-    string place = "no";
     while(!gameOver) {
+        if(restart) {
+            restart = false;
+            cout << "\n\rOn to the next world!" << endl;
+            delete nomad;
+            delete modern;
+            delete advanced;
+            //refresh lights
+            LED_1 = 1;
+            LED_2 = 1;
+            LED_3 = 1;
+            LED_4 = 1;
+            LED_5 = 1;
+            LED_6 = 1;
+            LED_7 = 1;
+            LED_8 = 1;
+            LED_9 = 1;
+            LED_N = 0;
+            LED_M = 0;
+            LED_A = 0;
+            //New Classes
+            nomad = new Death("nomad");
+            modern = new Death("modern");
+            advanced = new Death("advanced");
+        }
 	    float holder = tsi.readPercentage();
         if(holder != 0 ) {
             if(holder <= 0.30) {  
-                place = "Nomad";
+                curPlace = "Nomad";
+                cout << "\n\rThis is the nomadic civulization.\n";
             } else if (holder >= 0.60){
-                place = "Advanced";
+                curPlace = "Advanced";
+                cout << "\n\rThis is the advanced civulization.\n";
             } else if ((holder >0.30) || (holder <0.60)) {
-                place = "Modern";
+                curPlace = "Modern";
+                cout << "\n\rThis is the modern civulization.\n";
             }
         }       
          // Check the analog inputs.
-	string sensor = CheckSensor();
-	if(sensor.compare("no") != 0) {
-		outcome = sensor;
-	}
-        Events(place, outcome);
-	outcome = "no";
-        gameOver = endingsTracker();
-    CheckTemperatureSensor();
-    CheckLightSensor();
+    Volcanoy();
+    eventhandler(outcome);
+    eventhandler(CheckTemperatureSensor());
+    eventhandler(CheckLightSensor());
+    lightsUpdater(curPlace);
+    gameOver = endingsTracker();
         wait_us(1000000); // Wait 1 second before repeating the loop.
     }
-    std::cout << "You have completed your training. You are welcomed to Godhood."<< std::endl;
+    std::cout << "\n\rYou have completed your training. You are welcomed to Godhood."<< std::endl;
 }
 // End of HardwareInterruptSeedCode
