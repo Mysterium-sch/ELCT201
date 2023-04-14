@@ -19,8 +19,8 @@ class Death {
 
     protected:
     int people;
-    bool love, wind, greed, religion, gun, plague, Aliens = false;
-    bool cold, dark, hot, light = false;
+    int love, wind, greed, religion, gun, plague, Aliens = 0;
+    int cold, dark, hot, light, ending = 0;
     string world;
 };
 
