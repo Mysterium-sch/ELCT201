@@ -149,7 +149,7 @@ void Volcanoy(void)
 {
        if((rand() % (10 + 1)) == 1) {
         OutputMotor = 1;
-        cout << "A volcan is starting to emerge in " << curPlace << " if it is not stopped, everyone will die.\n";
+        cout << "A volcano is starting to emerge in " << curPlace << " if it is not stopped, everyone will die.\n";
         for(int i = 0; i<10; i++) {
             if(CheckTorqueSensor()) {
                 i=11;
