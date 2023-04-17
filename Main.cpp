@@ -8,38 +8,38 @@
 
 //NEED CORRECT PIN NUMBERS
 AnalogIn LightSensor(PTE20);
-AnalogIn TemperatureSensor(PTE21);
-AnalogIn TorqueSensor(PTC1);
+AnalogIn TemperatureSensor(PTB1);
+AnalogIn TorqueSensor(PTD6);
 InterruptIn WorldRefresh(PTD1);
 
-DigitalOut OutputMotor(PTC9);
+DigitalOut OutputMotor(PTC12);
 
-DigitalOut LED_1(PTC7);
+DigitalOut LED_1(PTC7);//Yellow
 DigitalOut LED_2(PTC0);
 DigitalOut LED_3(PTC3);
-DigitalOut LED_4(PTE29);
+DigitalOut LED_4(PTE29);//Green
 DigitalOut LED_5(PTE30);
 DigitalOut LED_6(PTB0);
-DigitalOut LED_7(PTE2);
+DigitalOut LED_7(PTE2);//Red
 DigitalOut LED_8(PTB3);
 DigitalOut LED_9(PTC2); 
 
-DigitalOut LED_N(PTC4);
-DigitalOut LED_M(PTD7);
-DigitalOut LED_A(PTE3);
+DigitalOut LED_N(PTC4); //yellow
+DigitalOut LED_M(PTD7); //green
+DigitalOut LED_A(PTE3); //red
 
 DigitalOut TemperatureHotLED(PTB8);
 DigitalOut TemperatureColdLED(PTB9);
 DigitalOut PhotoHigh(PTE5);
 DigitalOut PhotoDark(PTE4);
 
-InterruptIn Wind(PTD3);
-InterruptIn Greed(PTD2);
-InterruptIn Religion(PTD0);
-InterruptIn Plague(PTD5);
-InterruptIn Love(PTA13);
+InterruptIn Wind(PTD3); //yes
+InterruptIn Greed(PTD2); //yes
+InterruptIn Religion(PTD0); //yes
+InterruptIn Plague(PTD5); //yes
+InterruptIn Love(PTA13); //yes
 InterruptIn aliens(PTA5);
-InterruptIn Gun(PTA12);
+InterruptIn Gun(PTA12); //yes
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
 
@@ -68,7 +68,7 @@ float LightBrightResistanceLimit = 1600.0; // Bright level
 float LightDarkResistanceLimit = 5000.0; //Dark level
 float TemperatureHotLimit = 27.0; // Overheat level
 float TemperatureColdLimit = 15.0; //Too cold level
-float MotorCurrentLimit = 0.1; //enter a reference current in amperes for motor torque deactivation
+float MotorCurrentLimit = 0.081; //enter a reference current in amperes for motor torque deactivation
 
 //Classes
 Death *NOMAD = new Death("NOMAD");
@@ -438,7 +438,7 @@ int main(void)
                 curPlace = "MODERN";
                 cout << "\n\rThis is the MODERN civilization.\n";
             }
-        }       
+        }   
         if (curPlace != "none") {
             Volcanoy();
         }
