@@ -5,7 +5,7 @@
     Death::Death(string s) {
         people = 3;
         world = s;
-        love = 0; wind=0; greed=0; religion=0; gun=0; plague=0; Aliens=0; cold=0; dark=0; hot=0; light = 0;
+        love = 0; wind=0; greed=0; religion=0; gun=0; plague=0; aliens=0; cold=0; dark=0; hot=0; light = 0;
         ending = 0;
     }
 
@@ -23,7 +23,7 @@
             return;
         }
             if(value.compare("volcano")==0) {
-            cout << "\n\rThe volcano devastated The" + world + " people and wiped out their civilization.\n";
+            cout << "\n\rThe volcano devastated the " + world + " people and wiped out their civilization.\n";
             people =0;
         }
             else if(value.compare("love")==0) {
@@ -64,7 +64,7 @@
                 }
                 if(wind+cold == 2) {
                     if(world.compare("NOMAD")==0) {
-                        cout << "\n\rThe nomads noticed the weather changing and moved to somewhere warmer.\n";
+                        cout << "\n\rThe NOMADS noticed the weather changing and moved to somewhere warmer.\n";
                     } else {
                     cout << "\n\rA blizzard has struck the civilization.\n";
                     if(people != 0) {
@@ -76,7 +76,7 @@
                 }
                 if(wind + hot==2) {
                     if(world.compare("NOMAD")==0) {
-                        cout <<  "\n\rThe nomads noticed the weather getting warmer and moved north.\n";
+                        cout <<  "\n\rThe NOMADS noticed the weather getting warmer and moved north.\n";
                     } else {
                     cout << "\n\rThe civilization is unprepared for the heat.\n";
                     if(people != 0) {
@@ -93,7 +93,7 @@
                 } else {
                     cout << "\n\rPeople are becoming very envious of others success and belonings\n";
                 }
-                if(gun + Aliens + greed==3) {
+                if(gun + aliens + greed==3) {
                     if(people != 0) {
                     if(world.compare("ADVANCED")== 0) {
                     cout << "\n\rThis " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
@@ -111,8 +111,8 @@
 
             }else if(value.compare("gun")==0) {
                 gun = 1;
-                cout << "\n\rSteel has been discovered, and with it swords have been invented.\n";
-                if(gun + Aliens + greed==3) {
+                cout << "\n\rGun powder has been discovered.\n";
+                if(gun + aliens + greed==3) {
                     if(people != 0) {
                     if(world.compare("ADVANCED")== 0) {
                     cout << "\n\rThis " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
@@ -129,9 +129,9 @@
                 }
                  if(gun + religion==2) {
                     if(world.compare("ADVANCED")==0) {
-                        cout << "\n\rThe advanced civilization has agreed that fighting over religion is fruitless.\n";
+                        cout << "\n\rThe ADVANCED civilization has agreed that fighting over religion is fruitless.\n";
                     }
-                    if(people != 0) 
+                    if(people != 0) {
                         cout << "\n\rThe civilization can't come to consenses on who's religion is right.\n";
                         people -= 1;
                     }
@@ -141,14 +141,14 @@
                 if(religion==1) {
                     cout << "\n\rThe people are becoming spiritual.\n";
                         if(world.compare("ADVANCED")==0) {
-                        cout << "\n\rbut the advanced civiulation is past the point of needing a god\n";
+                        cout << "\n\rbut the ADVANCED civiulation is past the point of needing a god\n";
                     }
                 } else {
                     cout << "\n\rThe people are losing their faith.\n";
                 }
                 if(gun + religion==2) {
                     if(world.compare("ADVANCED")==0) {
-                        cout << "\n\rThe advanced civilization has agreed that fighting over religion is fruitless.\n";
+                        cout << "\n\rThe ADVANCED civilization has agreed that fighting over religion is fruitless.\n";
                     }
                     if(people != 0) {
                         cout << "\n\rThe civilization can't come to consenses on who's religion is right.\n";
@@ -172,7 +172,7 @@
                     }
                     if(plague + cold==2) {
                     if(world.compare("NOMAD")==0) {
-                        cout << "\n\rThe nomads move before the cold sets in so plague does not spread as fast.\n";
+                        cout << "\n\rThe NOMADS move before the cold sets in so plague does not spread as fast.\n";
                     } else {
                     cout << "\n\rThe sickness is worstening during these harsh winters.\n";
                     if(people != 0) {
@@ -182,7 +182,7 @@
                     }
                     }
                 }
-                if(Aliens + plague==2) {
+                if(aliens + plague==2) {
                     if(world.compare("MODERN")==0) {
                         cout << "\n\rThere are no aliens here.\n";
                     } else {
@@ -194,16 +194,16 @@
                 }
                 }
             }else if(value.compare("alien")==0) {
-                    if(Aliens==0){Aliens=1;}else{Aliens=0;}
-                    if(Aliens==1) {
+                    if(aliens==0){aliens=1;}else{aliens=0;}
+                    if(aliens==1) {
                         cout << "\n\rMysterious space men have appeared.\n";
                         if(world.compare("MODERN")==0) {
-                            cout << "\n\rBut the modern civulization does not belivie in such things.\n";
+                            cout << "\n\rBut the MODERN civulization does not belivie in such things.\n";
                         }
                     } else {
                         cout << "\n\rThe space men have left.\n";
                     }
-                                    if(gun + Aliens + greed==3) {
+                                    if(gun + aliens + greed==3) {
                     if(people != 0) {
                     if(world.compare("ADVANCED")== 0) {
                     cout << "\n\rThis " + world + " civilization admires the aliens technology and plans to work harder to acheivie such feats.\n";
@@ -214,23 +214,23 @@
                         people = 0;
                     }
                 } else {
-                    cout << "\n\rThere are no aliens to fight.\n";
+                    cout << "\n\rThere are no people for the aliens to fight.\n";
                 }
                 }
                 }
                 
-                if(Aliens + dark==2) {
+                if(aliens + dark==2) {
                     if(world.compare("MODERN")==0) {
-                        cout << "\n\rSomeone has gone missing, the Aliens claim the didn't do it.\n";
+                        cout << "\n\rSomeone has gone missing, the aliens claim the didn't do it.\n";
                     } else {
-                    cout << "\n\rSomeone has gone missing, the Aliens claim the didn't do it.\n";
+                    cout << "\n\rSomeone has gone missing, the aliens claim the didn't do it.\n";
                     } 
                     people -= 1;
                     if (people <= 0) {
                         people =0;
                     }
                 }
-                if(Aliens + plague==2) {
+                if(aliens + plague==2) {
                     if(world.compare("MODERN")==0) {
                         cout << "\n\rThere are no aliens here.\n";
                     } else {
@@ -251,7 +251,7 @@
                 }
                 if(wind+cold == 2) {
                     if(world.compare("NOMAD")==0) {
-                        cout << "\n\rThe nomads noticed the weather changing and moved to somewhere warmer.\n";
+                        cout << "\n\rThe NOMADS noticed the weather changing and moved to somewhere warmer.\n";
                     } else {
                     cout << "\n\rA blizzard has struck the civilization.\n";
                     if(people != 0) {
@@ -263,7 +263,7 @@
                 }
                 if(plague + cold==2) {
                     if(world.compare("NOMAD")==0) {
-                        cout << "\n\rThe nomads move before the cold sets in so plague does not spread as fast.\n";
+                        cout << "\n\rThe NOMADS move before the cold sets in so plague does not spread as fast.\n";
                     } else {
                     cout << "\n\rThe sickness is worstening during these harsh winters.\n";
                     if(people != 0) {
@@ -283,7 +283,7 @@
                 }
                 if(wind + hot==2) {
                     if(world.compare("NOMAD")==0) {
-                        cout <<  "\n\rThe nomads noticed the weather getting warmer and moved north.\n";
+                        cout <<  "\n\rThe NOMADS noticed the weather getting warmer and moved north.\n";
                     } else {
                     cout << "\n\rThe civilization is unprepared for the heat.\n";
                     if(people != 0) {
@@ -315,11 +315,11 @@
                 if(dark==1) {
                 cout << "\n\rThe world is getting dark.\n";
                 }
-                if(Aliens + dark==2) {
+                if(aliens + dark==2) {
                     if(world.compare("MODERN")==0) {
-                        cout << "\n\rSomeone has gone missing, the Aliens claim the didn't do it.\n";
+                        cout << "\n\rSomeone has gone missing, the aliens claim the didn't do it.\n";
                     } else {
-                    cout << "\n\rSomeone has gone missing, the Aliens claim the didn't do it.\n";
+                    cout << "\n\rSomeone has gone missing, the aliens claim the didn't do it.\n";
                     } 
                     people -= 1;
                     if (people <= 0) {
@@ -343,45 +343,62 @@
             if(value.compare("beachday")==0) {
                 if(light + hot + love ==3 && people == 3) {
                     cout << "\n\rThis " + world + " is having a lovely day at the beach. The weather is perfect for it.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
                     ending = 1;
 }
         } else if(value.compare("christmas")==0) {
             if(cold+love+religion==3) {
             if(world.compare("ADVANCED")==0) {
             cout << "\n\rThis " + world + " civilization scoffs at the idea of christmas as they are beyond religion.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
             ending = 0;
             } else {
                 cout << "\n\rIts a beautiful snowy day and the " + world + " civilization is giving gifts to each other.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
                 ending = 1;
             }
             }
 
         } else if(value.compare("cultural")==0) {
-            if(religion + love + Aliens==3) {
+            if(religion + love + aliens==3) {
             if(world.compare("ADVANCED")==0) {
             cout << "\n\rThe aliens taught The " + world + " civilization to grow and accept old concepts. Culture is now being developed.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
             ending = 1;
             } else if (world.compare("MODERN")==0) {
-                cout << "\n\rThe modern civilization has vast ties to their culture and refuses to change.\n";
+                cout << "\n\rThe MODERN civilization has vast ties to their culture and refuses to change.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
                 ending = 0;
             } else {
-                cout << "\n\rThe nomadic civilization moves to often to develop their culture.\n";
+                cout << "\n\rThe NOMADIC civilization moves to often to develop their culture.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
                 ending = 0;
             }
                         }
         } else if(value.compare("nothing")==0) {
-            if(people == 0 && Aliens==1) {
+            if(people == 0 && aliens==1) {
                 cout << "\n\rThe world may be vast, but there is no one here. The "+ world +" people are gone.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
                 ending = 1;
             }
         } else if(value.compare("warming")==0) {
             if(wind + hot==2 && people < 2) {
             cout << "\n\rThe world is slowing warming up. This may be a problem, but not the " + world + "s problem.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
             ending = 1;
             }
         } else if(value.compare("gone")==0) {
             if(people == 0 && cold + dark==2) {
                 cout << "\n\rThe world may be vast, but there is no one here. The " << world << "s` are gone.\n";
+                    cout << "\n\r You have found an ending. Click the WorldRefresh button to continue your training.\n";
+
                 ending = 1;
             }
         }
