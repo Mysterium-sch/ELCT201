@@ -19,7 +19,7 @@ class Death {
 
     protected:
     int people;
-    int love, wind, greed, religion, gun, plague, Aliens = 0;
+    int love, wind, greed, religion, gun, plague, aliens = 0;
     int cold, dark, hot, light, ending = 0;
     string world;
 };
