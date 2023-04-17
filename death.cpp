@@ -91,7 +91,7 @@
                 if(world.compare("ADVANCED")== 0) {
                     cout << "\n\rThe " + world + " civilization is immune to the powers that greed holds.\n";
                 } else {
-                    cout << "\n\rPeople are becoming very envious of others success and belonings\n";
+                    cout << "\n\rPeople are becoming very envious of others success and belongings\n";
                 }
                 if(gun + aliens + greed==3) {
                     if(people != 0) {
@@ -111,7 +111,7 @@
 
             }else if(value.compare("gun")==0) {
                 gun = 1;
-                cout << "\n\rGun powder has been discovered.\n";
+                cout << "\n\rSteel has been discovered, and with it swords have been invented.\n";
                 if(gun + aliens + greed==3) {
                     if(people != 0) {
                     if(world.compare("ADVANCED")== 0) {
