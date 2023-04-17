@@ -20,12 +20,12 @@ DigitalOut LED_3(PTC3);
 DigitalOut LED_4(PTE29);
 DigitalOut LED_5(PTE30);
 DigitalOut LED_6(PTB0);
-DigitalOut LED_7(PTB2);
+DigitalOut LED_7(PTE2);
 DigitalOut LED_8(PTB3);
 DigitalOut LED_9(PTC2); 
 
 DigitalOut LED_N(PTC4);
-DigitalOut LED_M(PTB1);
+DigitalOut LED_M(PTD7);
 DigitalOut LED_A(PTE3);
 
 DigitalOut TemperatureHotLED(PTB8);
@@ -38,7 +38,7 @@ InterruptIn Greed(PTD2);
 InterruptIn Religion(PTD0);
 InterruptIn Plague(PTD5);
 InterruptIn Love(PTA13);
-InterruptIn Aliens(PTA5);
+InterruptIn aliens(PTA5);
 InterruptIn Gun(PTA12);
 
 #define Vsupply 3.3f //microcontroller voltage supply 3.3V
@@ -385,7 +385,7 @@ int main(void)
     Religion.rise(&Religioner);
     Plague.rise(&Plaguer);
     Love.rise(&Lover);
-    Aliens.rise(&Aliener);
+    aliens.rise(&Aliener);
     Gun.rise(&Gunner);
 
     LED_1 = 1;
